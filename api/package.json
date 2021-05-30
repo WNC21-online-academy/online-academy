@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WNC21-online-academy/online-academy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WNC21-online-academy/online-academy/issues"
+  },
+  "homepage": "https://github.com/WNC21-online-academy/online-academy#readme",
+  "dependencies": {
+    "ajv": "^8.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "knex": "^0.95.6",
+    "morgan": "^1.10.0",
+    "pg": "^8.6.0"
+  }
+}
