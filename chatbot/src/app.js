@@ -1,7 +1,9 @@
+// import libs
 const express = require('express');
 require('dotenv').config();
-const handler = require('./handler');
+const handler = require('./repositories/initialize');
 const router = require('./router');
+const constants = require('./constants/index');
 
 // declare app instance
 const app = express();
@@ -24,7 +26,7 @@ app.use((err, req, res, next) => {
 })
 
 // run app
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || constants.defaultPort;
 app.listen(PORT, function () {
   console.log(`Api server is running at port ${PORT}`);
   handler.initPersistentMenu();

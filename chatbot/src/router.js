@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const handler = require('./handler');
-
-const verifyToken = process.env.FBAPP_VERIFY_TOKEN;
+const handler = require('./repositories/handler');
+const contants = require('./constants/index');
 
 router.get('/', function (req, res) {
   res.json({
@@ -12,7 +11,7 @@ router.get('/', function (req, res) {
 
 /* Intergrate facebook webhook */
 router.get('/webhook', (req, res) => {
-  if (req.query['hub.verify_token'] === verifyToken) {
+  if (req.query['hub.verify_token'] === contants.verifyToken) {
     res.send(req.query['hub.challenge']);
   }
   res.send('Error, wrong validation token');
