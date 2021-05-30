@@ -187,3 +187,23 @@ CREATE TABLE RefreshToken (
   refresh_token VARCHAR(200),
   CONSTRAINT fk_rftoken_user FOREIGN KEY (id_user) REFERENCES Account (id)
 );
+
+
+-- Full text search
+CREATE EXTENSION IF NOT EXISTS unaccent;
+ALTER TABLE Course ADD COLUMN name_tsv tsvector;
+
+CREATE OR REPLACE FUNCTION course_name_tsv_trigger_func()
+RETURNS TRIGGER LANGUAGE plpgsql AS 
+$$BEGIN NEW.name_tsv =
+	setweight(to_tsvector(coalesce(unaccent(NEW.name))), 'A'); -- ||
+	-- setweight(to_tsvector(coalesce(unaccent(NEW.description))), 'B') ||
+	-- setweight(to_tsvector(coalesce(unaccent(NEW.content))), 'D');
+RETURN NEW;
+END;$$;	
+
+CREATE TRIGGER course_name_tsv_trigger BEFORE INSERT OR UPDATE
+OF name, description, content ON Course FOR EACH ROW
+EXECUTE PROCEDURE course_name_tsv_trigger_func();
+
+CREATE INDEX name_tsv_idx ON Course USING GIN(name_tsv);

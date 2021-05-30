@@ -192,6 +192,10 @@ const sendMenu = async senderId => {
 /* Send category list to user */
 
 const sendCategoriesPagination = async (senderId, datalist, parentId, page) => {
+  if(!datalist.length){
+    sendMessage(senderId, 'Không tìm thấy!');
+    return;
+  }
   const pagesize = 10;
   const start = (page - 1) * pagesize;
   const min = Math.min(datalist.length, start + pagesize);
@@ -262,7 +266,11 @@ const sendCategoriesChild = async (senderId, payload) => {
 
 /* Send course list to user */
 
-const sendCoursesPagination = async (senderId, datalist, page) => {
+const sendCoursesPagination = async (senderId, datalist, page, payloadLoadMore) => {
+  if(!datalist.length){
+    sendMessage(senderId, 'Không tìm thấy!');
+    return;
+  }
   const pagesize = 10;
   const start = (page - 1) * pagesize;
   const min = Math.min(datalist.length, start + pagesize);
@@ -304,6 +312,9 @@ const sendCoursesPagination = async (senderId, datalist, page) => {
   };
 
   await postFetch(urlFbGraphMessages, defaultHeaders, body);
+  if (page * pagesize < datalist.length) {
+    await sendButtonPostback(senderId, 'Tải thêm lĩnh vực khác?', 'Xem thêm', payloadLoadMore);
+  }
 }
 
 const sendCoursesByCategory = async (senderId, payload) => {
@@ -313,18 +324,21 @@ const sendCoursesByCategory = async (senderId, payload) => {
     .where({ id_category: categoryId })
     .select('id', 'name', 'description', 'image_messenger', 'url');
 
-  await sendCoursesPagination(senderId, list, page);
+  const payloadLoadMore = `${payloadCoursePrefix}${categoryId || ''}_${payloadPagePrefix}${page + 1}`;
+  await sendCoursesPagination(senderId, list, page, payloadLoadMore);
 }
 
 const sendCoursesByKeyword = async (senderId, payload) => {
   const keyword = sliceKw(payload);
   const page = slicePage(payload) || 1;
-  const list = await db('course')
-    .where('name', 'like', `%${keyword}%`)
-    .select('id', 'name', 'description', 'image_messenger', 'url');
+  const keywordPieces = keyword.trim().toLowerCase().replace(/\s+/g, "|");
 
+  const list = await db('course')
+    .whereRaw(`name_tsv @@ unaccent('${keywordPieces}')::tsquery`)
+    .select('id', 'name', 'description', 'image_messenger', 'url');
   if (list.length) {
-    await sendCoursesPagination(senderId, list, page);
+    const payloadLoadMore = `${payloadSearch}${keyword || ''}_${payloadPagePrefix}${page + 1}`;
+    await sendCoursesPagination(senderId, list, page, payloadLoadMore);
   }
   else {
     sendMessage(senderId, 'Không tìm thấy!');
@@ -413,7 +427,7 @@ const handleMessage = async entries => {
               await sendMessage(senderId, 'Nhập tên khóa học: ');
               await setSearchingState(senderId, true);
             }
-            else if (new RegExp(`^${payloadSearch}(\\S+)_${payloadPagePrefix}(\\d+)$`).test(payload)) {
+            else if (new RegExp(`^${payloadSearch}([^_]+)_${payloadPagePrefix}(\\d+)$`).test(payload)) {
               await sendCoursesByKeyword(senderId, payload);
             }
             else if (new RegExp(`^${payloadCategoryPrefix}_${payloadPagePrefix}(\\d+)$`).test(payload)) {
