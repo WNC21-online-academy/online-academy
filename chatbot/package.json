@@ -13,6 +13,9 @@
   "dependencies": {
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "request": "^2.88.2"
+    "knex": "^0.95.6",
+    "moment": "^2.29.1",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.6.0"
   }
 }
