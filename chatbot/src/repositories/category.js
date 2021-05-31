@@ -13,7 +13,7 @@ const payloadPagePrefix = constants.payloadPagePrefix;
 
 const sendCategoriesPagination = async (senderId, datalist, parentId, page) => {
   if (!datalist.length) {
-    base.sendMessage(senderId, 'Không tìm thấy!');
+    await base.sendMessage(senderId, 'Không tìm thấy!');
     return;
   }
   const pagesize = 10;
@@ -26,12 +26,13 @@ const sendCategoriesPagination = async (senderId, datalist, parentId, page) => {
     title: item.name,
     buttons: [
       {
-        title: parentId ? "Các khóa học" : "Xem chi tiết",
         type: "postback",
+        title: parentId ? "Các khóa học" : "Xem chi tiết",
         payload: `${parentId ? payloadCoursePrefix : payloadCategoryPrefix}${item.id}_${payloadPagePrefix}1`
       },
     ]
   }));
+
   const body = {
     recipient: {
       id: senderId
@@ -40,15 +41,8 @@ const sendCategoriesPagination = async (senderId, datalist, parentId, page) => {
       attachment: {
         type: "template",
         payload: {
-          template_type: "list",
-          top_element_style: "compact",
-          elements: listEls,
-          buttons: [
-            {
-              title: "View More",
-              type: "postback",
-            }
-          ]
+          template_type: "generic",
+          elements: listEls
         }
       }
     }

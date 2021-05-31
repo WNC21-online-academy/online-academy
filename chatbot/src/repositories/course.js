@@ -29,8 +29,8 @@ const sendCoursesPagination = async (senderId, datalist, page, payloadLoadMore) 
     image_url: item.image_messenger,
     buttons: [
       {
-        title: "Xem chi tiết",
         type: "postback",
+        title: "Xem chi tiết",
         payload: `${payloadCourseDetailPrefix}${item.id}`
       },
     ]
@@ -43,15 +43,8 @@ const sendCoursesPagination = async (senderId, datalist, page, payloadLoadMore) 
       attachment: {
         type: "template",
         payload: {
-          template_type: "list",
-          top_element_style: "compact",
-          elements: listEls,
-          buttons: [
-            {
-              title: "View More",
-              type: "postback",
-            }
-          ]
+          template_type: "generic",
+          elements: listEls
         }
       }
     }
@@ -87,8 +80,8 @@ const sendCoursesByKeyword = async (senderId, payload) => {
     await sendCoursesPagination(senderId, list, page, payloadLoadMore);
   }
   else {
-    base.sendMessage(senderId, 'Không tìm thấy!');
-    base.sendMenu(senderId);
+    await base.sendMessage(senderId, 'Không tìm thấy!');
+    await base.sendMenu(senderId);
   }
 }
 
@@ -105,7 +98,7 @@ const sendCoursesDetail = async (senderId, payload) => {
 
   const detail = response[0];
   if (!detail) {
-    base.sendMessage(senderId, 'Không tồn tại!');
+    await base.sendMessage(senderId, 'Không tồn tại!');
     return;
   }
   const promotions = await db('promotion')
