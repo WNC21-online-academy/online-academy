@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const userModel = require('../models/user.model');
+const categoryRoutes = require('./routes/categories');
+const courseRoutes = require('./routes/courses');
 
 router.get('/api/v1', function (req, res) {
   res.json({
@@ -8,10 +9,8 @@ router.get('/api/v1', function (req, res) {
   });
 })
 
+router.use('/api/v1/categories', categoryRoutes)
+router.use('/api/v1/courses', courseRoutes)
 
-router.get('/api/v1/users', async function (req, res) {
-  const list = await userModel.all();
-  res.json(list);
-})
 
 module.exports = router;
