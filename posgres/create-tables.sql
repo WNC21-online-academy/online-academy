@@ -60,6 +60,7 @@ CREATE TABLE Course (
   thumbnail VARCHAR(200),
   tutition INT,
   is_completed BOOLEAN,
+  view_count INT,
   image_messenger VARCHAR(200),
   url VARCHAR(500),
   is_draft BOOLEAN,
