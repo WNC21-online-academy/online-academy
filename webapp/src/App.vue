@@ -1,21 +1,24 @@
 <template>
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <Suspense>
+    <template #default>
+      <Layout>
+        <router-view />
+      </Layout>
+    </template>
+    <template #fallback>
+      <Loading />
+    </template>
+  </Suspense>
 </template>
 
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { provide } from 'vue'
+import store from './store'
+import Layout from './layout/Layout.vue'
+import Loading from './components/Loading.vue'
 
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
+provide('store', store)
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

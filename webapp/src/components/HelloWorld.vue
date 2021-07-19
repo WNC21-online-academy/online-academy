@@ -1,6 +1,6 @@
 <template>
   <h1>{{ msg }}</h1>  
-  <p>
+  <!-- <p>
     <a href="https://vitejs.dev/guide/features.html" target="_blank">Vite Documentation</a>
     |
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Documentation</a>
@@ -11,7 +11,7 @@
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
-  <p class="font-bold !font-medium">This will be medium even though bold comes later in the CSS.</p>
+  <p class="font-bold !font-medium">This will be medium even though bold comes later in the CSS.</p> -->
 </template>
 
 <script setup>

@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Luckies Guy;
+    src: url(https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swa) format("woff");
+  }
+}
+
+a{
+  cursor: pointer;
+}

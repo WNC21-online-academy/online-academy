@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 })
 
 // Listen running app 
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, function () {
   console.log(`Online academy api is running at port ${PORT}`);
 })
