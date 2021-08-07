@@ -1,14 +1,27 @@
 const db = require('../utils/db');
 
 module.exports = {
-  listAll(kw, catId, offset, limit) {
-    const courses = db('course')
+  async search(kw, catId, orderBy, offset, limit) {
+    let keywordPieces = '';
+    if (kw) {
+      keywordPieces = kw.trim().toLowerCase().replace(/\s+/g, "|");
+    }
+
+    const courses = await db('course_view')
+      .whereRaw(keywordPieces ? `name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .whereRaw(catId ? `id_category = ${catId}` : '')
+      .orderBy(orderBy)
       .limit(limit)
       .offset(offset);
-    if (catId && typeof catId === 'number') {
-      courses.where('id_category', catId);
-    }
-    return courses;
+    const count = await db('course_view')
+      .whereRaw(keywordPieces ? `name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .whereRaw(catId ? `id_category = ${catId}` : '')
+      .count('*', { as: 'count' });
+
+    return {
+      count: +count[0].count,
+      courses
+    };
   },
   listTopHot(offset, limit) {
     return db('course')
@@ -41,8 +54,8 @@ module.exports = {
       .offset(offset);
   },
   single(id) {
-    return db('course')
-      .where('ids', id)
+    return db('course_view')
+      .where('id', id)
       .first();
   },
 };

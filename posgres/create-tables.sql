@@ -15,10 +15,9 @@ CREATE TABLE FbState (
 );
 
 -- User type table
-DROP TABLE IF EXISTS AccountType CASCADE;
-CREATE TABLE AccountType (
-  id SERIAL PRIMARY KEY,
-  type VARCHAR(100) UNIQUE NOT NULL,
+DROP TABLE IF EXISTS Role CASCADE;
+CREATE TABLE Role (
+  role VARCHAR(100) PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );
 
@@ -26,13 +25,14 @@ CREATE TABLE AccountType (
 DROP TABLE IF EXISTS Account CASCADE;
 CREATE TABLE Account (
   id SERIAL PRIMARY KEY,
-  id_type INT NOT NULL,
+  role VARCHAR(100),
   fullname VARCHAR(200) NOT NULL,
   email VARCHAR(200) UNIQUE NOT NULL,
   password VARCHAR(500),
+  refresh_token VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_account_type FOREIGN KEY (id_type) REFERENCES AccountType (id)
+  CONSTRAINT fk_account_role FOREIGN KEY (role) REFERENCES Role (role)
 );
 CREATE TRIGGER set_updated_at_account
 BEFORE INSERT OR UPDATE ON Account
@@ -61,7 +61,7 @@ CREATE TABLE Course (
   tutition INT,
   is_completed BOOLEAN,
   view_count INT,
-  image_messenger VARCHAR(200),
+  -- image_messenger VARCHAR(200),
   url VARCHAR(500),
   is_draft BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -80,7 +80,7 @@ CREATE TABLE Rating (
   id SERIAL PRIMARY KEY,
   id_course INT NOT NULL,
   id_student INT NOT NULL,
-  score FLOAT NOT NULL,
+  score FLOAT NOT NULL DEFAULT 0,
   comment VARCHAR(100),
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_rating_course FOREIGN KEY (id_course) REFERENCES Course (id),

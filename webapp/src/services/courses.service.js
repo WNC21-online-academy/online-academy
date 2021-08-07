@@ -22,10 +22,36 @@ export const getTopNew = async () => {
   return getTop('/courses/top/new')
 }
 
-export const getTopEnroll = async () => {
-  return getTop('/courses/top/enroll')
+export const getTopWeek = async () => {
+  return getTop('/courses/top/week')
 }
 
 export const getTopRelated = async () => {
   return getTop('/courses/top/related')
+}
+
+
+export const search = async ({ keyword, categoryId, orderBy, limit, offset }) => {
+  const params = {
+    keyword,
+    category: categoryId,
+    order_by: orderBy,
+    limit,
+    offset
+  }
+  const response = await axiosInstance.get('/courses', { params });
+  if (response.status = 200) {
+    const { data } = response;
+    return data;
+  }
+  return null;
+}
+
+export const fetchById = async ({ courseId }) => {
+  const response = await axiosInstance.get(`/courses/${+courseId}`);
+  if (response.status = 200) {
+    const { data } = response;
+    return data;
+  }
+  return null;
 }

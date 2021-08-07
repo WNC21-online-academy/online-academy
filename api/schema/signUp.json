@@ -1,0 +1,22 @@
+{
+  "required": [
+    "email",
+    "fullname",
+    "password"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "fullname": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 100
+    }
+  }
+}

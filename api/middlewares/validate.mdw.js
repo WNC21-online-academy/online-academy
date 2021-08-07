@@ -1,7 +1,9 @@
 const Ajv = require('ajv').default;
+const addFormats = require('ajv-formats');
 
 module.exports = schema => (req, res, next) => {
-  const ajv = new Ajv();
+  const ajv = new Ajv({ strictTypes: false });
+  addFormats(ajv);
   const validate = ajv.compile(schema);
   const valid = validate(req.body);
   if (!valid) {

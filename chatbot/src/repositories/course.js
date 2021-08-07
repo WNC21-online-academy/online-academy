@@ -26,7 +26,7 @@ const sendCoursesPagination = async (senderId, datalist, page, payloadLoadMore) 
   const listEls = pageList.map(item => ({
     title: item.name,
     subtitle: item.description,
-    image_url: item.image_messenger,
+    image_url: item.thumbnail,
     buttons: [
       {
         type: "postback",
@@ -61,7 +61,7 @@ const sendCoursesByCategory = async (senderId, payload) => {
   const page = base.slicePage(payload) || 1;
   const list = await db('course')
     .where({ id_category: categoryId })
-    .select('id', 'name', 'description', 'image_messenger', 'url');
+    .select('id', 'name', 'description', 'thumbnail', 'url');
 
   const payloadLoadMore = `${payloadCoursePrefix}${categoryId || ''}_${payloadPagePrefix}${page + 1}`;
   await sendCoursesPagination(senderId, list, page, payloadLoadMore);
@@ -74,7 +74,7 @@ const sendCoursesByKeyword = async (senderId, payload) => {
 
   const list = await db('course')
     .whereRaw(`name_tsv @@ unaccent('${keywordPieces}')::tsquery`)
-    .select('id', 'name', 'description', 'image_messenger', 'url');
+    .select('id', 'name', 'description', 'thumbnail', 'url');
   if (list.length) {
     const payloadLoadMore = `${payloadSearch}${keyword || ''}_${payloadPagePrefix}${page + 1}`;
     await sendCoursesPagination(senderId, list, page, payloadLoadMore);
@@ -93,7 +93,7 @@ const sendCoursesDetail = async (senderId, payload) => {
   const response = await db('course')
     .where({ id: courseId })
     .select('id', 'id_created_by', 'name', 'description', 'content', 'tutition', 'url'
-      // 'is_completed', 'image_messenger', 
+      // 'is_completed', 'thumbnail', 
     );
 
   const detail = response[0];

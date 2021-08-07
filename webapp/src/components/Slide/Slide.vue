@@ -9,13 +9,11 @@
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
-    <!-- <swiper-slide v-for="item in list">{{ item.name }}</swiper-slide> -->
-
     <swiper-slide v-for="item in list">
-      <Thumbnail :item="item"/>
+      <Thumbnail :item="item" />
     </swiper-slide>
     <div class="swiper-button-prev">
-      <DroprightIcon />
+      <DropleftIcon />
     </div>
     <div class="swiper-button-next">
       <DroprightIcon />
@@ -28,15 +26,13 @@ import { defineProps, reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import SwiperCore, { Navigation, Pagination, A11y } from 'swiper';
 
-// import SwiperCore, { EffectFade } from 'swiper';
 import 'swiper/swiper-bundle.min.css';
-// import 'swiper/components/effect-fade/effect-fade.min.css';
 import Thumbnail from './Thumbnail.vue'
 import DroprightIcon from '../Icons/DroprightIcon.vue'
+import DropleftIcon from '../Icons/DropleftIcon.vue'
 
 SwiperCore.use([Navigation, Pagination, A11y]);
 
-// SwiperCore.use([EffectFade]);
 defineProps({
   list: Array
 })
@@ -54,117 +50,3 @@ const onSlideChange = _ => {
 }
 
 </script>
-
-<style lang="css">
-.swiper-pagination-bullet-active {
-  background: #ddd !important;
-  width: 25px !important;
-  height: 5px !important;
-  border-radius: 0 !important;
-}
-.swiper-pagination-bullet {
-  background: #ccc !important;
-  width: 25px !important;
-  height: 5px !important;
-  border-radius: 0 !important;
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  width: 80px !important;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-.swiper-button-prev {
-  left: 4px !important;
-  right: auto !important;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-.swiper-button-next {
-  right: 4px !important;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-.swiper-button-prev span,
-.swiper-button-next span {
-  width: 10px;
-  height: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  position: absolute;
-  border: solid 2px #666;
-  border-left: 0;
-  border-bottom: 0;
-  transition: all 0.1s ease;
-}
-.swiper-button-prev span {
-  transform: rotate(-135deg);
-  left: 49%;
-}
-.swiper-button-next span {
-  transform: rotate(45deg);
-  right: 49%;
-}
-.swiper-button-prev:hover span,
-.swiper-button-next:hover span {
-  width: 5px;
-  height: 5px;
-}
-.swiper-button-prev:after,
-.swiper-button-next:after {
-  width: 0px;
-  height: inherit;
-  position: absolute;
-  border-radius: 5px;
-  background-color: white;
-  content: "";
-  transition: all 0.4s ease-in-out;
-  z-index: -1;
-  opacity: 0.8;
-  font-size: 1.75rem;
-}
-.swiper-button-prev:after {
-  right: 0;
-}
-.swiper-button-next:after {
-  left: 0;
-}
-.swiper-button-prev:hover:after,
-.swiper-button-next:hover:after {
-  width: inherit;
-}
-
-@media screen and (max-width: 512px) {
-  .swiper-button-prev,
-  .swiper-button-next {
-    width: 60px;
-    height: 60px;
-    bottom: 0;
-  }
-  .swiper-arrows {
-    height: 60px;
-  }
-  .swiper-button-prev {
-    right: 60px;
-  }
-  .swiper-button-prev span {
-    left: 45%;
-  }
-  .swiper-button-next span {
-    right: 45%;
-  }
-}
-/* .swiper-button-next::after,
-.swiper-container-rtl .swiper-button-prev::after {
-  content: "attr" !important;
-}
-.swiper-button-prev::after,
-.swiper-container-rtl .swiper-button-prev::after {
-  content: "attr" !important;
-} */
-</style>

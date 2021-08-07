@@ -1,41 +1,37 @@
 <template>
   <SearchBox />
-  <!-- <Carousel :list="topHot"/> -->
-  <div class="divide-y-2 divide-yellow-300 divide-dashed">
-    <h3 class="p-4 text-2xl font-semibold">Nổi bật</h3>
-    <Slide class="py-8" :list="topView" />
+  <div>
+    <h3 class="p-5 text-2xl font-semibold">Khóa học nổi bật</h3>
+    <Slide class="py-2" :list="topHot" />
   </div>
-
-  <div class="divide-y-2 divide-yellow-300 divide-dashed">
-    <h3 class="p-4 text-2xl font-semibold">Phổ biến</h3>
-    <Carousel class="py-8 px-4" :list="topView" />
+  <div>
+    <h3 class="p-5 text-2xl font-semibold">Khóa học nhiều người quan tâm</h3>
+    <Carousel class="mx-5" :list="topView" />
   </div>
-  <div class="divide-y-2 divide-yellow-300 divide-dashed">
-    <h3 class="p-4 text-2xl font-semibold">Mới nhất</h3>
-    <Carousel class="py-8 px-4" :list="topView" />
+  <div>
+    <h3 class="p-5 text-2xl font-semibold">Khóa học mới</h3>
+    <Carousel class="mx-5" :list="topNew" />
   </div>
-  <div class="divide-y-2 divide-yellow-300 divide-dashed">
-    <h3 class="p-4 text-2xl font-semibold">Hot trong tuần</h3>
-    <Carousel class="py-8 px-4" :list="topView" />
+  <div>
+    <h3 class="p-5 text-2xl font-semibold">Khóa học phổ biến trong tuần</h3>
+    <Carousel class="mx-5" :list="topWeek" />
   </div>
-  <!-- <Carousel :list="topNew"/>
-  <Carousel :list="topEnroll"/>
-  <Carousel :list="topRelated"/>-->
+  <div>
+    <h3 class="p-5 text-2xl font-semibold">Khóa học liên quan</h3>
+    <Carousel class="mx-5" :list="topRelated" />
+  </div>
 </template>
 
 <script setup>
-import SearchBox from '../components/SearchBox.vue'
+import SearchBox from '../components/SearchBox/SearchBox.vue'
 import Carousel from '../components/Carousel/Carousel.vue'
 import Slide from '../components/Slide/Slide.vue'
-import { getTopHot, getTopView, getTopNew, getTopEnroll, getTopRelated } from '../services/courses.service'
-import { } from 'vue'
+import { getTopHot, getTopView, getTopNew, getTopWeek, getTopRelated } from '../services/courses.service'
 
-
-// const topHot = await getTopHot()
+const topHot = await getTopHot()
 const topView = await getTopView()
-console.log('topView :>> ', topView);
-// const topNew = await getTopNew()
-// const topEnroll = await getTopEnroll()
-// const topRelated = await getTopRelated()
+const topNew = await getTopNew()
+const topWeek = await getTopWeek()
+const topRelated = await getTopRelated()
 
 </script>
