@@ -42,11 +42,11 @@ const navigation = {
   prevEl: '.swiper-button-prev',
 }
 const onSwiper = swiper => {
-  console.log(swiper);
+  // console.log(swiper);
 }
 
 const onSlideChange = _ => {
-  console.log('slide change');
+  // console.log('slide change');
 }
 
 </script>

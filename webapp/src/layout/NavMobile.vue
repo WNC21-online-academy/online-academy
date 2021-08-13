@@ -47,7 +47,7 @@
         </ul>
       </div>
       <div class="mt-auto">
-        <div v-show="!authenticated" class="pt-6">
+        <div v-show="!store.state.authenticated" class="pt-6">
           <router-link
             to="/sign-in"
             class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
@@ -57,7 +57,7 @@
             class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl"
           >Đăng ký</router-link>
         </div>
-        <div v-show="authenticated" class="pt-6">
+        <div v-show="store.state.authenticated" class="pt-6">
           <router-link
             to="/profile"
             class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl"
@@ -76,14 +76,19 @@
 </template>
 
 <script setup>
-import { defineEmit } from 'vue'
+import { defineEmit, inject } from 'vue'
 import CloseIcon from '../components/Icons/CloseIcon.vue'
 import LogoIcon from '../components/Icons/LogoIcon.vue'
 
+// store
+const store = inject('store')
+
+// props
 defineProps({
-  authenticated: Boolean,
-  menu: Array,
+  menu: Array
 })
+
+// events
 const emit = defineEmit(['onMobileToggle', 'onLogout'])
 
 function closeMobileMenu() {

@@ -24,7 +24,8 @@ router.get('/top/related', async function (req, res) {
   const list = await courseModel.listTopRelated(courseId, offset, limit);
   res.json(list);
 })
-router.get('/', async function (req, res) {
+
+router.get('/search', async function (req, res) {
   const { keyword, category, order_by, offset, limit } = req.query;
   let orderBy = [{
     column: 'updated_at',
@@ -56,9 +57,20 @@ router.get('/', async function (req, res) {
       });
       break;
   }
-  const { count, courses } = await courseModel.search(keyword, +category, orderBy, +offset, +limit);
-  res.json({ count, courses });
+  const { count, list } = await courseModel.search(keyword, +category, orderBy, +offset, +limit);
+  res.json({ count, list });
 })
+
+router.get('/', async function (req, res) {
+  const { keyword, offset, limit } = req.query;
+  let orderBy = [{
+    column: 'updated_at',
+    order: 'desc'
+  }];
+  const { count, list } = await courseModel.search(keyword, null, orderBy, +offset, +limit);
+  res.json({ count, list });
+})
+
 router.get('/:id', authMdw, async function (req, res) {
   const { id } = req.params;
   const course = await courseModel.single(+id);

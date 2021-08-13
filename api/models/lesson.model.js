@@ -2,6 +2,6 @@ const db = require('../utils/db');
 
 module.exports = {
   all() {
-    return db('lession');
+    return db('lessons');
   },
 };

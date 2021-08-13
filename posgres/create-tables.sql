@@ -8,22 +8,22 @@ END;$$;
 
 -- Create tables
 -- Facebook messenger state table
-DROP TABLE IF EXISTS FbState CASCADE;
-CREATE TABLE FbState (
+DROP TABLE IF EXISTS FbStates CASCADE;
+CREATE TABLE FbStates (
   id_fb_user VARCHAR(50) PRIMARY KEY,
   is_searching BOOLEAN
 );
 
--- User type table
-DROP TABLE IF EXISTS Role CASCADE;
-CREATE TABLE Role (
+-- User roles table
+DROP TABLE IF EXISTS Roles CASCADE;
+CREATE TABLE Roles (
   role VARCHAR(100) PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );
 
--- User table
-DROP TABLE IF EXISTS Account CASCADE;
-CREATE TABLE Account (
+-- Users table
+DROP TABLE IF EXISTS Users CASCADE;
+CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   role VARCHAR(100),
   fullname VARCHAR(200) NOT NULL,
@@ -32,25 +32,31 @@ CREATE TABLE Account (
   refresh_token VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_account_role FOREIGN KEY (role) REFERENCES Role (role)
+  CONSTRAINT fk_users_roles FOREIGN KEY (role) REFERENCES Roles (role)
 );
-CREATE TRIGGER set_updated_at_account
-BEFORE INSERT OR UPDATE ON Account
+CREATE TRIGGER set_updated_at_users
+BEFORE INSERT OR UPDATE ON Users
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- Course category table
-DROP TABLE IF EXISTS Category CASCADE;
-CREATE TABLE Category (
+-- Categories table
+DROP TABLE IF EXISTS Categories CASCADE;
+CREATE TABLE Categories (
   id SERIAL PRIMARY KEY,
   id_parent INT,
   name VARCHAR(100) NOT NULL,
-  CONSTRAINT fk_category_parent FOREIGN KEY (id_parent) REFERENCES Category (id)
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_categories_parents FOREIGN KEY (id_parent) REFERENCES Categories (id)
 );
+CREATE TRIGGER set_updated_at_categories
+BEFORE INSERT OR UPDATE ON Categories
+FOR EACH ROW
+EXECUTE FUNCTION update_col_trig();
 
--- Course table
-DROP TABLE IF EXISTS Course CASCADE;
-CREATE TABLE Course (
+-- Courses table
+DROP TABLE IF EXISTS Courses CASCADE;
+CREATE TABLE Courses (
   id SERIAL PRIMARY KEY,
   id_category INT NOT NULL,
   id_created_by INT NOT NULL,
@@ -66,11 +72,11 @@ CREATE TABLE Course (
   is_draft BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_course_category FOREIGN KEY (id_category) REFERENCES Category (id),
-  CONSTRAINT fk_course_createdby FOREIGN KEY (id_created_by) REFERENCES Account (id)
+  CONSTRAINT fk_courses_categories FOREIGN KEY (id_category) REFERENCES Categories (id),
+  CONSTRAINT fk_courses_createdby FOREIGN KEY (id_created_by) REFERENCES Users (id)
 );
-CREATE TRIGGER set_updated_at_course
-BEFORE INSERT OR UPDATE ON Course
+CREATE TRIGGER set_updated_at_courses
+BEFORE INSERT OR UPDATE ON Courses
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
@@ -83,8 +89,8 @@ CREATE TABLE Rating (
   score FLOAT NOT NULL DEFAULT 0,
   comment VARCHAR(100),
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_rating_course FOREIGN KEY (id_course) REFERENCES Course (id),
-  CONSTRAINT fk_rating_student FOREIGN KEY (id_student) REFERENCES Account (id),
+  CONSTRAINT fk_rating_courses FOREIGN KEY (id_course) REFERENCES Courses (id),
+  CONSTRAINT fk_rating_users FOREIGN KEY (id_student) REFERENCES Users (id),
   UNIQUE (id_course, id_student)
 );
 CREATE TRIGGER set_updated_at_rating
@@ -92,21 +98,21 @@ BEFORE INSERT OR UPDATE ON Rating
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- Promotion table
-DROP TABLE IF EXISTS Promotion CASCADE;
-CREATE TABLE Promotion (
+-- Promotions table
+DROP TABLE IF EXISTS Promotions CASCADE;
+CREATE TABLE Promotions (
   id SERIAL PRIMARY KEY,
   id_course INT NOT NULL,
   price FLOAT NOT NULL,
   description VARCHAR(200),
   time_begin TIMESTAMPTZ,
   time_end TIMESTAMPTZ,
-  CONSTRAINT fk_promotion_course FOREIGN KEY (id_course) REFERENCES Course (id)
+  CONSTRAINT fk_promotions_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
 );
 
--- Lesson table
-DROP TABLE IF EXISTS Lesson CASCADE;
-CREATE TABLE Lesson (
+-- Lessons table
+DROP TABLE IF EXISTS Lessons CASCADE;
+CREATE TABLE Lessons (
   id SERIAL PRIMARY KEY,
   id_course INT NOT NULL,
   sort_order INT UNIQUE NOT NULL,
@@ -115,24 +121,24 @@ CREATE TABLE Lesson (
   is_preview BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_lesson_course FOREIGN KEY (id_course) REFERENCES Course (id)
+  CONSTRAINT fk_lessons_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
 );
-CREATE TRIGGER set_updated_at_lesson
-BEFORE INSERT OR UPDATE ON Lesson
+CREATE TRIGGER set_updated_at_lessons
+BEFORE INSERT OR UPDATE ON Lessons
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- Attachment type table
-DROP TABLE IF EXISTS AttachmentType CASCADE;
-CREATE TABLE AttachmentType (
+-- Attachment types table
+DROP TABLE IF EXISTS AttachmentTypes CASCADE;
+CREATE TABLE AttachmentTypes (
   id SERIAL PRIMARY KEY,
   type VARCHAR(100) UNIQUE NOT NULL,
   name VARCHAR(100) NOT NULL
 );
 
--- Attachment table
-DROP TABLE IF EXISTS Attachment CASCADE;
-CREATE TABLE Attachment (
+-- Attachments table
+DROP TABLE IF EXISTS Attachments CASCADE;
+CREATE TABLE Attachments (
   id SERIAL PRIMARY KEY,
   id_lesson INT,
   id_course INT,
@@ -140,61 +146,62 @@ CREATE TABLE Attachment (
   description VARCHAR(500),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_attachment_lesson FOREIGN KEY (id_lesson) REFERENCES Lesson (id),
-  CONSTRAINT fk_attachment_course FOREIGN KEY (id_course) REFERENCES Course (id)
+  CONSTRAINT fk_attachments_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id),
+  CONSTRAINT fk_attachments_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
 );
-CREATE TRIGGER set_updated_at_attachment
-BEFORE INSERT OR UPDATE ON Attachment
+CREATE TRIGGER set_updated_at_attachments
+BEFORE INSERT OR UPDATE ON Attachments
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
 -- User course detail table
-DROP TABLE IF EXISTS UserCourseDetail CASCADE;
-CREATE TABLE UserCourseDetail (
+DROP TABLE IF EXISTS UserCourseDetails CASCADE;
+CREATE TABLE UserCourseDetails (
   id_user INT NOT NULL,
   id_course INT NOT NULL,
   is_watchlist BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id_user, id_course),
-  CONSTRAINT fk_ucdetail_user FOREIGN KEY (id_user) REFERENCES Account (id),
-  CONSTRAINT fk_ucdetail_course FOREIGN KEY (id_course) REFERENCES Course (id)
+  CONSTRAINT fk_ucdetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
+  CONSTRAINT fk_ucdetails_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
 );
-CREATE TRIGGER set_updated_at_ucdetail
-BEFORE INSERT OR UPDATE ON UserCourseDetail
+CREATE TRIGGER set_updated_at_ucdetails
+BEFORE INSERT OR UPDATE ON UserCourseDetails
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- User lession detail table
-DROP TABLE IF EXISTS UserLessonDetail CASCADE;
-CREATE TABLE UserLessonDetail (
+-- User lesson detail table
+DROP TABLE IF EXISTS UserLessonDetails CASCADE;
+CREATE TABLE UserLessonDetails (
   id_user INT NOT NULL,
   id_lesson INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id_user, id_lesson),
-  CONSTRAINT fk_uldetail_user FOREIGN KEY (id_user) REFERENCES Account (id),
-  CONSTRAINT fk_uldetail_lesson FOREIGN KEY (id_lesson) REFERENCES Lesson (id)
+  CONSTRAINT fk_uldetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
+  CONSTRAINT fk_uldetails_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id)
 );
-CREATE TRIGGER set_updated_at_uldetail
-BEFORE INSERT OR UPDATE ON UserLessonDetail
+CREATE TRIGGER set_updated_at_uldetails
+BEFORE INSERT OR UPDATE ON UserLessonDetails
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- Refresh token table
-DROP TABLE IF EXISTS RefreshToken CASCADE;
-CREATE TABLE RefreshToken (
+-- Refresh tokens table
+DROP TABLE IF EXISTS RefreshTokens CASCADE;
+CREATE TABLE RefreshTokens (
   id_user INT PRIMARY KEY,
   refresh_token VARCHAR(200),
-  CONSTRAINT fk_rftoken_user FOREIGN KEY (id_user) REFERENCES Account (id)
+  CONSTRAINT fk_rftokens_users FOREIGN KEY (id_user) REFERENCES Users (id)
 );
 
 
 -- Full text search
 CREATE EXTENSION IF NOT EXISTS unaccent;
-ALTER TABLE Course ADD COLUMN name_tsv tsvector;
+-- Courses
+ALTER TABLE Courses ADD COLUMN name_tsv tsvector;
 
-CREATE OR REPLACE FUNCTION course_name_tsv_trigger_func()
+CREATE OR REPLACE FUNCTION courses_name_tsv_trigger_func()
 RETURNS TRIGGER LANGUAGE plpgsql AS 
 $$BEGIN NEW.name_tsv =
 	setweight(to_tsvector(coalesce(unaccent(NEW.name))), 'A'); -- ||
@@ -203,8 +210,24 @@ $$BEGIN NEW.name_tsv =
 RETURN NEW;
 END;$$;	
 
-CREATE TRIGGER course_name_tsv_trigger BEFORE INSERT OR UPDATE
-OF name, description, content ON Course FOR EACH ROW
-EXECUTE PROCEDURE course_name_tsv_trigger_func();
+CREATE TRIGGER courses_name_tsv_trigger BEFORE INSERT OR UPDATE
+OF name, description, content ON Courses FOR EACH ROW
+EXECUTE PROCEDURE courses_name_tsv_trigger_func();
 
-CREATE INDEX name_tsv_idx ON Course USING GIN(name_tsv);
+CREATE INDEX courses_name_tsv_idx ON Courses USING GIN(name_tsv);
+
+-- Categories
+ALTER TABLE Categories ADD COLUMN name_tsv tsvector;
+
+CREATE OR REPLACE FUNCTION categories_name_tsv_trigger_func()
+RETURNS TRIGGER LANGUAGE plpgsql AS 
+$$BEGIN NEW.name_tsv =
+	setweight(to_tsvector(coalesce(unaccent(NEW.name))), 'A');
+RETURN NEW;
+END;$$;	
+
+CREATE TRIGGER categories_name_tsv_trigger BEFORE INSERT OR UPDATE
+OF name ON Categories FOR EACH ROW
+EXECUTE PROCEDURE categories_name_tsv_trigger_func();
+
+CREATE INDEX categories_name_tsv_idx ON Categories USING GIN(name_tsv);

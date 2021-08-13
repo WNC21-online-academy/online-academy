@@ -1,7 +1,6 @@
 <template>
   <header>
     <NavBar
-      :authenticated="store.state.authenticated"
       :menu="menu"
       :showCategoriesChildren="showCategoriesChildren"
       @onCategoriesToggle="onCategoriesToggle"
@@ -10,7 +9,6 @@
     />
     <NavMobile
       v-show="mobileToggle"
-      :authenticated="store.state.authenticated"
       :menu="menu"
       @onMobileToggle="onMobileToggle"
       @onLogout="onLogout"
@@ -29,15 +27,19 @@ const store = inject('store')
 const router = useRouter()
 const menu = reactive(store.getters.menu())
 
+// declare navbar dropdown variable
 const showCategoriesChildren = ref(false)
 function onCategoriesToggle(value = false) {
   showCategoriesChildren.value = value
 }
+
+// declare toggle on mobile variable
 const mobileToggle = ref(false)
 function onMobileToggle(value = false) {
   mobileToggle.value = value
 }
 
+// logout
 function onLogout() {
   logout()
   store.methods.setAuthenticated(false)
@@ -45,6 +47,7 @@ function onLogout() {
   router.push('/')
 }
 
+// state
 const state = reactive({ mobileToggle, showCategoriesChildren })
 
 </script>

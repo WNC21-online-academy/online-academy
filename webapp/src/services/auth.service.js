@@ -25,7 +25,7 @@ export const signIn = async data => {
       const { data } = response
       const obj = parseJwt(data.accessToken)
       localStorage.onlineAcademy_accessToken = data.accessToken
-      localStorage.onlineAcademy_expiresIn = obj.exp
+      localStorage.onlineAcademy_expiresIn = obj.exp * 1000 // second to milisecond
       localStorage.onlineAcademy_refreshToken = data.refreshToken
       localStorage.onlineAcademy_user = JSON.stringify({
         id: obj.userId,

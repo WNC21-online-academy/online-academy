@@ -39,7 +39,7 @@ export const search = async ({ keyword, categoryId, orderBy, limit, offset }) =>
     limit,
     offset
   }
-  const response = await axiosInstance.get('/courses', { params });
+  const response = await axiosInstance.get('/courses/search', { params });
   if (response.status = 200) {
     const { data } = response;
     return data;
@@ -54,4 +54,33 @@ export const fetchById = async ({ courseId }) => {
     return data;
   }
   return null;
+}
+
+export const fetchAll = async ({ keyword, limit, offset }) => {
+  const params = {
+    keyword,
+    // order_by: orderBy,
+    limit,
+    offset
+  }
+  const response = await axiosInstance.get('/courses', { params });
+  if (response.status = 200) {
+    const { data } = response;
+    return data;
+  }
+  return null;
+}
+
+export const remove = async ({ id }) => {
+  try {
+    const response = await axiosInstance.delete(`/courses/${id}`);
+    if (response.status = 200) {
+      const { data } = response;
+      return { id: data };
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi khòa học cò ràng buộc khóa học, không thể xóa."
+    }
+  }
 }

@@ -120,7 +120,7 @@ const errorTexts = {
   invalidEmail: 'Email không hợp lệ',
   emptyPassword: 'Chưa điền mật khẩu',
   tooShortPassword: 'Mật khẩu phải ít nhất 8 ký tự',
-  tooLongPassword: 'Mật khẩu không được vượt quá 8 ký tự',
+  tooLongPassword: 'Mật khẩu không được vượt quá 100 ký tự',
   emptyConfirmPassword: 'Chưa xác nhận mật khẩu',
   invalidConfirmPassword: 'Mật khẩu không khớp'
 }

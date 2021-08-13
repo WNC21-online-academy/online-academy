@@ -41,7 +41,7 @@ async function searchCourses() {
     limit: perPage,
     offset: perPage * (currentPage.value - 1)
   })
-  state.courses = searchResult.courses
+  state.courses = searchResult.list
   state.count = searchResult.count
 
 }

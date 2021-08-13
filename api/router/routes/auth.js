@@ -21,7 +21,7 @@ router.post('/sign-up', validateMdw(signUpSchema), async function (req, res) {
       return res.status(409).send();
     }
     const user = await userModel.add(req.body);
-    res.status(200).json(user);
+    res.status(200).json({ email: user.email });
   } catch (error) {
     res.status(400).json(error);
   }

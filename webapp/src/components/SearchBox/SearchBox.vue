@@ -31,6 +31,7 @@
             class="flex-grow"
             :list="categories"
             :selectedItem="selectedCat"
+            defaultTitle="Tất cả"
             @onSelect="onSelectCategory"
           />
         </div>
@@ -40,6 +41,7 @@
             class="flex-grow"
             :list="ordering"
             :selectedItem="selectedOrder"
+            defaultTitle="Không"
             @onSelect="onSelectOrder"
           />
         </div>

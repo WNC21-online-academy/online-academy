@@ -17,7 +17,6 @@ import store from './store'
 import Layout from './layout/Layout.vue'
 import Loading from './components/Loading.vue'
 
-store.state.user={le: 123}
 provide('store', store)
 
 </script>

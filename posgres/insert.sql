@@ -1,17 +1,18 @@
-TRUNCATE Role CASCADE;
-INSERT INTO Role(role, name)
+TRUNCATE Roles CASCADE;
+INSERT INTO Roles(role, name)
 VALUES ('administrator', 'Quản trị viên'),
   ('teacher', 'Giảng viên'),
   ('student', 'Học viên');
   
-TRUNCATE Account CASCADE;
-INSERT INTO Account(id, role, fullname, email, password)
+TRUNCATE Users CASCADE;
+INSERT INTO Users(id, role, fullname, email, password)
 VALUES (1, 'administrator', 'Chủ tịch', 'thi174hcmus@gmail.com', '$2b$10$mNyffbvojuMTp3cwhVycPuORtl5a4Jk/YkoBH/FrOrGKOF/0Xtc/m'),
   (2, 'teacher', 'Thầy A', 'thile.dev@gmail.com', '$2b$10$mNyffbvojuMTp3cwhVycPuORtl5a4Jk/YkoBH/FrOrGKOF/0Xtc/m'),
   (3, 'student', 'Học viên Z', 'ichi.itus@gmail.com', '$2b$10$mNyffbvojuMTp3cwhVycPuORtl5a4Jk/YkoBH/FrOrGKOF/0Xtc/m');
+ALTER SEQUENCE users_id_seq RESTART WITH 4;
 
-TRUNCATE Category CASCADE;
-INSERT INTO Category(id, name, id_parent)
+TRUNCATE Categories CASCADE;
+INSERT INTO Categories(id, name, id_parent)
 VALUES (1, 'Lập trình',NULL),
   (2, 'Kinh doanh', NULL),
   (3, 'Tài chính & Kế toán', NULL),
@@ -133,10 +134,11 @@ VALUES (1, 'Lập trình',NULL),
   (105, 'Hình họa', 13),
   (106, 'Kỹ thuật thể hiện tranh', 13),
   (107, 'Chất liệu', 13);
+ALTER SEQUENCE categories_id_seq RESTART WITH 108;
 
 
-TRUNCATE Course CASCADE;
-INSERT INTO Course(id, id_category, id_created_by, name, description, content, thumbnail, tutition)
+TRUNCATE Courses CASCADE;
+INSERT INTO Courses(id, id_category, id_created_by, name, description, content, thumbnail, tutition)
 VALUES
   -- Lap trinh 15-26
   (1, 15, 1, 'Javascript 2021', 'From Zero to master', 'Khóa học Javascript hiện đại. JavaScript là ngôn ngữ lập trình phổ biến nhất trên thế giới trong suốt 20 năm qua. Nó cũng là một trong số 3 ngôn ngữ chính của lập trình web (Html, Css, Javascript). JavaScript có thể học nhanh và dễ dàng áp dụng cho nhiều mục đích khác nhau, từ việc cải thiện tính năng của website đến việc chạy game và tạo phần mềm nền web. Hơn nữa, có hàng ngàn mẫu template JavaScript và ứng dụng ngoài kia, nhờ vào sự cống hiến của cộng đồng.', 'https://antrandigital.com/wp-content/uploads/2020/07/share-khoa-hoc-javascript-antrandigital.jpg', 1500000),
@@ -178,6 +180,7 @@ VALUES
 
   -- Hoi hoa 104-107 
 ;
+ALTER SEQUENCE courses_id_seq RESTART WITH 14;
 
 TRUNCATE Rating CASCADE;
 INSERT INTO Rating(id, id_course, id_student, score, comment)
@@ -195,9 +198,11 @@ VALUES (1, 1, 1, 5, 'Good'),
   (12, 11, 1, 5, 'Good'),
   (13, 12, 1, 5, 'Good'),
   (14, 13, 1, 5, 'Good');
+ALTER SEQUENCE rating_id_seq RESTART WITH 19;
 
-TRUNCATE AttachmentType CASCADE;
-INSERT INTO AttachmentType(id, type, name)
+TRUNCATE AttachmentTypes CASCADE;
+INSERT INTO AttachmentTypes(id, type, name)
 VALUES (1, 'outline', 'Đề cương tóm tắt'),
   (2, 'video', 'Video bài giảng'),
   (3, 'document', 'File tài liệu');
+ALTER SEQUENCE attachmenttypes_id_seq RESTART WITH 19;

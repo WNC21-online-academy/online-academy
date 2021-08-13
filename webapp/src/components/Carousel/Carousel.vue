@@ -59,11 +59,11 @@ defineProps({
 
 // events
 const onSwiper = swiper => {
-  console.log(swiper);
+  // console.log(swiper);
 }
 
 const onSlideChange = _ => {
-  console.log('slide change');
+  // console.log('slide change');
 }
 </script>
 

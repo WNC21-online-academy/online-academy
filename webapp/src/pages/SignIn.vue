@@ -67,7 +67,7 @@ import Helper from '../components/Auth/Helper.vue';
 import BackToHome from '../components/BackToHome.vue';
 import WarningIcon from '../components/Icons/WarningIcon.vue';
 import validator from '../utils/validator';
-import { getUserAuth, parseJwt, signIn } from '../services/auth.service';
+import { getUserAuth, signIn } from '../services/auth.service';
 
 const errorTexts = {
   emptyEmail: 'Chưa điền email',

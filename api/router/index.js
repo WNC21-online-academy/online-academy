@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const categoryRoutes = require('./routes/categories');
 const courseRoutes = require('./routes/courses');
 
@@ -11,6 +12,7 @@ router.get('/api/v1', function (req, res) {
 })
 
 router.use('/api/v1/auth', authRoutes)
+router.use('/api/v1/users', userRoutes)
 router.use('/api/v1/categories', categoryRoutes)
 router.use('/api/v1/courses', courseRoutes)
 
