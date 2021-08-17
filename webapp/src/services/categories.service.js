@@ -20,12 +20,13 @@ export const addOrUpdate = async data => {
     const payload = { name, id_parent };
     let response;
 
-    if (!id) {
-      response = await axiosInstance.post('/categories', payload);
-    }
-    if (id) {
+    if (id > 0) {
       response = await axiosInstance.put(`/categories/${id}`, payload);
     }
+    else {
+      response = await axiosInstance.post('/categories', payload);
+    }
+
     if (response.status = 200) {
       const { data } = response;
       return data;

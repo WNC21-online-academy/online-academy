@@ -29,6 +29,7 @@ CREATE TABLE Users (
   fullname VARCHAR(200) NOT NULL,
   email VARCHAR(200) UNIQUE NOT NULL,
   password VARCHAR(500),
+  avatar VARCHAR(500),
   refresh_token VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -58,7 +59,7 @@ EXECUTE FUNCTION update_col_trig();
 DROP TABLE IF EXISTS Courses CASCADE;
 CREATE TABLE Courses (
   id SERIAL PRIMARY KEY,
-  id_category INT NOT NULL,
+  id_category INT,
   id_created_by INT NOT NULL,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(200),
@@ -118,7 +119,8 @@ CREATE TABLE Lessons (
   sort_order INT UNIQUE NOT NULL,
   title VARCHAR(100),
   description VARCHAR(500),
-  is_preview BOOLEAN,
+  video VARCHAR(500),
+  is_draft BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_lessons_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
@@ -128,31 +130,31 @@ BEFORE INSERT OR UPDATE ON Lessons
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- Attachment types table
-DROP TABLE IF EXISTS AttachmentTypes CASCADE;
-CREATE TABLE AttachmentTypes (
-  id SERIAL PRIMARY KEY,
-  type VARCHAR(100) UNIQUE NOT NULL,
-  name VARCHAR(100) NOT NULL
-);
+-- -- Attachment types table
+-- DROP TABLE IF EXISTS AttachmentTypes CASCADE;
+-- CREATE TABLE AttachmentTypes (
+--   id SERIAL PRIMARY KEY,
+--   type VARCHAR(100) UNIQUE NOT NULL,
+--   name VARCHAR(100) NOT NULL
+-- );
 
--- Attachments table
-DROP TABLE IF EXISTS Attachments CASCADE;
-CREATE TABLE Attachments (
-  id SERIAL PRIMARY KEY,
-  id_lesson INT,
-  id_course INT,
-  url VARCHAR(200),
-  description VARCHAR(500),
-  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_attachments_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id),
-  CONSTRAINT fk_attachments_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
-);
-CREATE TRIGGER set_updated_at_attachments
-BEFORE INSERT OR UPDATE ON Attachments
-FOR EACH ROW
-EXECUTE FUNCTION update_col_trig();
+-- -- Attachments table
+-- DROP TABLE IF EXISTS Attachments CASCADE;
+-- CREATE TABLE Attachments (
+--   id SERIAL PRIMARY KEY,
+--   id_lesson INT,
+--   id_course INT,
+--   url VARCHAR(200),
+--   description VARCHAR(500),
+--   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+--   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+--   CONSTRAINT fk_attachments_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id),
+--   CONSTRAINT fk_attachments_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
+-- );
+-- CREATE TRIGGER set_updated_at_attachments
+-- BEFORE INSERT OR UPDATE ON Attachments
+-- FOR EACH ROW
+-- EXECUTE FUNCTION update_col_trig();
 
 -- User course detail table
 DROP TABLE IF EXISTS UserCourseDetails CASCADE;
@@ -172,20 +174,20 @@ FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
 -- User lesson detail table
-DROP TABLE IF EXISTS UserLessonDetails CASCADE;
-CREATE TABLE UserLessonDetails (
-  id_user INT NOT NULL,
-  id_lesson INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id_user, id_lesson),
-  CONSTRAINT fk_uldetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
-  CONSTRAINT fk_uldetails_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id)
-);
-CREATE TRIGGER set_updated_at_uldetails
-BEFORE INSERT OR UPDATE ON UserLessonDetails
-FOR EACH ROW
-EXECUTE FUNCTION update_col_trig();
+-- DROP TABLE IF EXISTS UserLessonDetails CASCADE;
+-- CREATE TABLE UserLessonDetails (
+--   id_user INT NOT NULL,
+--   id_lesson INT NOT NULL,
+--   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (id_user, id_lesson),
+--   CONSTRAINT fk_uldetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
+--   CONSTRAINT fk_uldetails_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id)
+-- );
+-- CREATE TRIGGER set_updated_at_uldetails
+-- BEFORE INSERT OR UPDATE ON UserLessonDetails
+-- FOR EACH ROW
+-- EXECUTE FUNCTION update_col_trig();
 
 -- Refresh tokens table
 DROP TABLE IF EXISTS RefreshTokens CASCADE;

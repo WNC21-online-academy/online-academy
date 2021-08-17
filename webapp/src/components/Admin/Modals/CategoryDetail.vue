@@ -58,7 +58,6 @@
       <div class="text-right space-x-5 mt-5">
         <button
           class="px-4 py-2 text-sm bg-white rounded-xl border transition-colors duration-150 ease-linear border-gray-200 text-gray-500 focus:outline-none focus:ring-0 font-bold hover:bg-gray-100 focus:bg-indigo-50 focus:text-indigo"
-          :disabled="!writable"
           @click="onToggleModal(false)"
         >Đóng</button>
         <a

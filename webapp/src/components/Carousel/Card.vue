@@ -72,7 +72,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import formator from '../../utils/formator';
+import { toCurrency } from '../../utils/formator';
 import HeartIcon from '../Icons/HeartIcon.vue';
 
 const router = useRouter()

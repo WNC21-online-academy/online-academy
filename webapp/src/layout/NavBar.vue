@@ -77,7 +77,15 @@
         </li>
       </template>
       <template v-if="store.getters.isTeacher()">
-        <div>teacher</div>
+        <li class="text-gray-500 hover:text-gray-700">
+          <router-link
+            to="/teacher/owncourses"
+            class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
+            :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'admin' }"
+          >
+            <span>Quản lý khóa học</span>
+          </router-link>
+        </li>
       </template>
       <template v-if="store.getters.isStudent()">
         <div>student</div>
@@ -163,13 +171,15 @@
       </li>
 
       <!-- Joined courses -->
-      <li>
-        <router-link
-          to="/joined"
-          class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer text-gray-500 hover:text-gray-700 no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
-          :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'joined' }"
-        >Đã tham gia</router-link>
-      </li>
+      <template v-if="!store.getters.isTeacher() && !store.getters.isAdmin()">
+        <li>
+          <router-link
+            to="/joined"
+            class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer text-gray-500 hover:text-gray-700 no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
+            :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'joined' }"
+          >Đã tham gia</router-link>
+        </li>
+      </template>
     </ul>
 
     <ul class="hidden md:flex items-center space-x-4">
@@ -192,7 +202,27 @@
       <!-- Show if authenticated-->
       <template v-if="store.state.authenticated">
         <li>
-          <router-link to="profile" class="px-3 py-4 text-gray-700">Profile</router-link>
+          <button
+            v-click-outside="onToggleProfile"
+            @click="onToggleProfile(!showProfileDropdown)"
+            class="flex flex-row items-center w-full px-2 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-full md:w-auto md:mt-0 md:ml-2 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+          >
+            <span class="w-8 h-8 rounded-full p-1">
+              <Avatar :src="store.state.user?.avatar" />
+            </span>
+          </button>
+          <div
+            v-show="showProfileDropdown"
+            class="absolute right-0 w-full mt-5 origin-top-right rounded-md shadow-lg md:w-48 z-10"
+          >
+            <div class="px-2 py-2 bg-white rounded-md shadow">
+              <router-link
+                to="/profile"
+                class="block p-2 mt-2 bg-transparent rounded-lg text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+              >Cập nhật thông tin</router-link>
+            </div>
+          </div>
+          <!-- <router-link to="profile" class="px-3 py-4 text-gray-700">Profile</router-link> -->
         </li>
         <li @click="onLogout">
           <a class="px-3 py-4 text-gray-700">Đăng xuất</a>
@@ -210,6 +240,8 @@ import DropdownIcon from '../components/Icons/DropdownIcon.vue'
 import DroprightIcon from '../components/Icons/DroprightIcon.vue'
 import LogoIcon from '../components/Icons/LogoIcon.vue'
 import MenuIcon from '../components/Icons/MenuIcon.vue'
+import Avatar from '../components/Avatar.vue'
+import { BASE_URL } from '../utils/contants';
 
 // store
 const store = inject('store')
@@ -229,6 +261,12 @@ function onCategoriesToggle(value = false) {
 }
 function onMobileToggle(value) {
   emit('onMobileToggle', value)
+}
+
+// handle select profile
+const showProfileDropdown = ref(false)
+function onToggleProfile(value = false) {
+  showProfileDropdown.value = value
 }
 
 // handle select category

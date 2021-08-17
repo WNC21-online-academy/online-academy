@@ -109,7 +109,7 @@
 import { reactive, watch } from 'vue';
 import Oauth from '../components/Auth/Oauth.vue';
 import Helper from '../components/Auth/Helper.vue';
-import BackToHome from '../components/BackToHome.vue';
+import BackToHome from '../components/BackTo.vue';
 import WarningIcon from '../components/Icons/WarningIcon.vue';
 import { signUp } from '../services/auth.service';
 import validator from '../utils/validator';

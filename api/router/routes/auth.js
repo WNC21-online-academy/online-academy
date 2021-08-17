@@ -29,12 +29,13 @@ router.post('/sign-up', validateMdw(signUpSchema), async function (req, res) {
 
 router.post('/sign-in', validateMdw(signInSchema), async function (req, res) {
   const user = await userModel.singleByEmail(req.body.email);
+  
   if (user === null) {
     return res.status(401).json({
       authenticated: false
     });
   }
-
+  
   if (!bcrypt.compareSync(req.body.password, user.password)) {
     return res.status(401).json({
       authenticated: false
@@ -79,5 +80,4 @@ router.post('/refresh', validateMdw(refreshTokenSchema), async function (req, re
     message: 'Refresh token is revoked!'
   });
 })
-
 module.exports = router;

@@ -30,7 +30,6 @@ export const getTopRelated = async () => {
   return getTop('/courses/top/related')
 }
 
-
 export const search = async ({ keyword, categoryId, orderBy, limit, offset }) => {
   const params = {
     keyword,
@@ -47,8 +46,8 @@ export const search = async ({ keyword, categoryId, orderBy, limit, offset }) =>
   return null;
 }
 
-export const fetchById = async ({ courseId }) => {
-  const response = await axiosInstance.get(`/courses/${+courseId}`);
+export const fetchById = async ({ id }) => {
+  const response = await axiosInstance.get(`/courses/${+id}`);
   if (response.status = 200) {
     const { data } = response;
     return data;
@@ -69,6 +68,64 @@ export const fetchAll = async ({ keyword, limit, offset }) => {
     return data;
   }
   return null;
+}
+
+export const fetchAllByTeacher = async ({ keyword, limit, offset }) => {
+  try {
+    const params = {
+      keyword,
+      // order_by: orderBy,
+      limit,
+      offset
+    }
+    const response = await axiosInstance.get(`/courses/by-creator`, { params });
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+    return null;
+  } catch (error) {
+    if (error?.response?.status === 401) {
+      return {
+        message: "Không đủ quyền"
+      }
+    }
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
+}
+
+export const addOrUpdate = async data => {
+  try {
+    const { id, id_category, name, description, content, thumbnail, tutition, is_completed, is_draft } = data;
+    const formData = new FormData;
+    formData.append('id_category', id_category)
+    formData.append('name', name)
+    formData.append('description', description)
+    formData.append('content', content)
+    formData.append('thumbnail', thumbnail)
+    formData.append('tutition', tutition)
+    formData.append('is_completed', is_completed || false)
+    formData.append('is_draft', is_draft || false)
+    let response;
+
+    if (id > 0) {
+      response = await axiosInstance.put(`/courses/${id}`, formData);
+    }
+    else {
+      response = await axiosInstance.post('/courses', formData);
+    }
+
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
 }
 
 export const remove = async ({ id }) => {

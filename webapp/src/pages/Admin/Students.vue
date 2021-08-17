@@ -16,6 +16,10 @@ import AdminBase from '../../components/Admin/AdminBase.vue';
 import UserDetail from '../../components/Admin/Modals/UserDetails/StudentDetail.vue'
 
 const fields = [{
+  key: 'avatar',
+  title: '',
+  type: 'image'
+},{
   key: 'fullname',
   title: 'Họ tên'
 }, {

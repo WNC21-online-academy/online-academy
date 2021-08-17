@@ -85,7 +85,7 @@ const props = defineProps({
   defaultTitle: String,
   disabled: Boolean
 })
-console.log('props.defaultTitle :>> ', props.defaultTitle);
+
 const open = ref(false)
 
 function toggleSelect(value = false) {

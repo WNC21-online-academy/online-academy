@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const { uploadImages } = require('../../middlewares/file-upload.mdw')
 const userModel = require('../../models/user.model');
 const roleModel = require('../../models/role.model');
 const authMdw = require('../../middlewares/auth.mdw');
+const pathPrefix = '/assets/images/';
 
 router.get('/students', async function (req, res) {
   const { keyword, offset, limit } = req.query;
@@ -22,6 +25,38 @@ router.get('/teachers', async function (req, res) {
   }];
   const { count, list } = await userModel.searchTeachers(keyword, orderBy, +offset, +limit);
   res.status(200).json({ count, list });
+})
+
+// Change password
+router.put('/change-pw', authMdw, async function (req, res) {
+  const { oldPw, newPw } = req.body;
+  const { userId } = req.accessTokenPayload;
+
+  const user = await userModel.single(userId);
+  if (!user || !bcrypt.compareSync(oldPw, user.password)) {
+    return res.status(401).json({
+      message: 'Invalid input'
+    });
+  }
+
+  const ret = await userModel.updatePassword(userId, { password: newPw });
+
+  return res.status(200).json(ret);
+})
+
+// Update profile
+router.put('/profile', authMdw, uploadImages.single('avatar'), async function (req, res) {
+  const { fullname, email } = req.body;
+  const { userId } = req.accessTokenPayload;
+  if (!userId) {
+    return res.status(401).json({
+      message: 'Invalid'
+    });
+  }
+  const file = req.file;
+  const avatar = file ? `${pathPrefix}${file.filename}` : '';
+  const ret = await userModel.update(userId, { fullname, email, avatar });
+  return res.status(200).json({ id: ret.id });
 })
 
 // Add 
@@ -71,6 +106,13 @@ router.delete('/:id', async function (req, res) {
     console.log('error :>> ', error);
     res.status(400).json(error);
   }
+})
+
+// get one
+router.get('/:id', async function (req, res) {
+  const { id } = req.params;
+  const user = await userModel.viewSingle(id);
+  res.status(200).json(user);
 })
 
 module.exports = router;

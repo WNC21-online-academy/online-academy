@@ -8,6 +8,10 @@ import CategoriesAdminPage from '../pages/Admin/Categories.vue'
 import CoursesAdminPage from '../pages/Admin/Courses.vue'
 import TeachersAdminPage from '../pages/Admin/Teachers.vue'
 import StudentsAdminPage from '../pages/Admin/Students.vue'
+import ProfilePage from '../pages/Profile.vue'
+import CoursesTeacherPage from '../pages/ForTeacher/Courses.vue'
+import CoursesTeacherDetailPage from '../pages/ForTeacher/CourseDetail.vue'
+import LessonsTeacherDetailPage from '../pages/ForTeacher/LessonDetail.vue'
 
 export default [
   { path: '/', component: HomePage },
@@ -22,6 +26,12 @@ export default [
     component: SignInPage,
     name: 'sign-in',
     meta: { auth: false }
+  },
+  {
+    path: '/profile',
+    component: ProfilePage,
+    name: 'profile',
+    meta: { auth: true }
   },
   {
     path: '/categories/:id',
@@ -68,6 +78,21 @@ export default [
     path: '/admin/students',
     name: 'manage-students',
     component: StudentsAdminPage
+  },
+  {
+    path: '/teacher/owncourses',
+    name: 'owncourses',
+    component: CoursesTeacherPage
+  },
+  {
+    path: '/teacher/owncourses/:id',
+    name: 'owncourses-detail',
+    component: CoursesTeacherDetailPage
+  },
+  {
+    path: '/teacher/owncourses/:id/:lessonId',
+    name: 'ownlessons-detail',
+    component: LessonsTeacherDetailPage
   },
   { path: '/:pathMatch(.*)*', component: NotFoundPage },
   { path: '/404', component: NotFoundPage },

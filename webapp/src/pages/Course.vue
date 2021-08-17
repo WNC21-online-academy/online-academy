@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router'
 import CardInfo from '../components/Detail/CardInfo.vue';
 import { fetchById } from '../services/courses.service';
@@ -23,5 +23,7 @@ async function getDetail() {
 }
 
 // Get course info
-await getDetail()
+onMounted(async () => {
+  await getDetail()
+})
 </script>

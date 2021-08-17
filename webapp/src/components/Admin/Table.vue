@@ -6,29 +6,40 @@
         <table class="table text-gray-400 border-separate space-y-6 mx-auto text-sm">
           <thead class="bg-gray-100 text-gray-700">
             <tr>
-              <th v-for="item in fields" class="text-left p-3">{{ item.title }}</th>
+              <template v-for="field in fields">
+                <th class="text-left p-3">
+                  {{ field.title }}
+                  <div v-if="field.type === 'image'" class="w-12"></div>
+                </th>
+              </template>
               <th class="p-3"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in list" class="bg-gray-100">
-              <!-- <td class="p-3">
-                <div class="flex align-items-center">
-                  <img
-                    class="rounded-full h-12 w-12 object-cover"
-                    src="https://images.unsplash.com/photo-1613588718956-c2e80305bf61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80"
-                    alt="unsplash image"
-                  />
-                </div>
-              </td>-->
-              <td
-                v-for="field in fields"
-                class="p-4 truncate font-semibold text-gray-500"
-              >{{ item[field.key] || field.default }}</td>
+              <template v-for="field in fields">
+                <td v-if="field.type === 'image'" class="p-3">
+                  <div class="flex align-items-center">
+                    <img
+                      class="rounded-full h-12 w-12 object-cover"
+                      :src="item[field.key]"
+                      :alt="item[field.key]"
+                      @error="$event.target.src = defaultImageSrc"
+                    />
+                  </div>
+                </td>
+                <td
+                  v-else
+                  class="p-4 truncate font-semibold text-gray-500"
+                >{{ formatField(item, field) || field.default }}</td>
+              </template>
               <td class="p-4">
                 <div class="flex">
+                  <a v-if="enableRedirectDetail" class="text-gray-600 hover:text-gray-400 mr-2">
+                    <EyeIcon @click="onClickRedirectDetail(item.id)" />
+                  </a>
                   <a v-if="enableRead" class="text-gray-600 hover:text-gray-400 mr-2">
-                    <EyeIcon @click=onClickRead(item) />
+                    <EyeIcon @click="onClickRead(item)" />
                   </a>
                   <a v-if="enableEdit" class="text-gray-600 hover:text-gray-400 mx-2">
                     <PencilIcon @click="onClickEdit(item)" />
@@ -110,12 +121,15 @@
 </template>
 
 <script setup>
-import { defineProps, inject } from "vue"
+import { computed, defineProps, inject } from "vue"
 import EyeIcon from '../Icons/EyeIcon.vue'
 import PencilIcon from '../Icons/PencilIcon.vue'
 import TrashIcon from '../Icons/TrashIcon.vue'
 import Pagination from '../Grid/Pagination.vue'
+import defaultImageSrc from '../../assets/images/placeholder.png'
+import { toCurrency, toDatetime } from '../../utils/formator';
 
+// store
 const store = inject('store')
 
 // props
@@ -126,11 +140,33 @@ defineProps({
   currentPage: Number,
   enableEdit: Boolean,
   enableRead: Boolean,
-  enableRemove: Boolean
+  enableRemove: Boolean,
+  enableRedirectDetail: Boolean
 })
 
+// computed
+const formatField = (item, field) => {
+  const value = item[field.key]
+  console.log('value :>> ', value);
+  const type = field.type
+  console.log('value :>> ', value);
+  console.log('type :>> ', type);
+  switch (type) {
+    case 'boolean':
+      if (value)
+        return field.trueValue
+      return field.falseValue
+    case 'datetime':
+      if (Date.parse(value) !== NaN)
+        return toDatetime(new Date(value))
+    case 'currency':
+      return toCurrency(value)
+    default: return value
+  }
+}
+
 // emit events
-const emit = defineEmit(['onEdit', 'onRead', 'onRemove'])
+const emit = defineEmit(['onEdit', 'onRead', 'onRemove', 'onRedirectDetail'])
 function onClickEdit(item) {
   emit('onEdit', item)
 }
@@ -140,6 +176,10 @@ function onClickRead(item) {
 function onClickRemove(id) {
   emit('onRemove', id)
 }
+function onClickRedirectDetail(id) {
+  emit('onRedirectDetail', id)
+}
+
 </script>
 
 <style>

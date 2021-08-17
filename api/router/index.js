@@ -4,6 +4,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const categoryRoutes = require('./routes/categories');
 const courseRoutes = require('./routes/courses');
+const lessonRoutes = require('./routes/lessons');
 
 router.get('/api/v1', function (req, res) {
   res.json({
@@ -15,15 +16,6 @@ router.use('/api/v1/auth', authRoutes)
 router.use('/api/v1/users', userRoutes)
 router.use('/api/v1/categories', categoryRoutes)
 router.use('/api/v1/courses', courseRoutes)
-
-// Test api
-const ratingModel = require('../models/rating.model.js');
-router.get('/test', (req, res) => {
-  const rating = req.query
-  ratingModel.add(rating)
-  res.send('oki')
-})
-// 
-
+router.use('/api/v1/lessons', lessonRoutes)
 
 module.exports = router;

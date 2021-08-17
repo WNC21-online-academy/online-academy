@@ -64,7 +64,7 @@ import { inject, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import Oauth from '../components/Auth/Oauth.vue';
 import Helper from '../components/Auth/Helper.vue';
-import BackToHome from '../components/BackToHome.vue';
+import BackToHome from '../components/BackTo.vue';
 import WarningIcon from '../components/Icons/WarningIcon.vue';
 import validator from '../utils/validator';
 import { getUserAuth, signIn } from '../services/auth.service';

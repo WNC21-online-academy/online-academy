@@ -63,6 +63,14 @@ module.exports = {
       .returning('*');
     return { ...result[0], password: undefined };
   },
+  async updatePassword(id, { password }) {
+    const result = await db('users')
+      .where('id', id).update({
+        password: bcrypt.hashSync(password, saltRounds)
+      })
+      .returning('*');
+    return { ...result[0], password: undefined };
+  },
 
   async isEmailExist(email) {
     const result = await db('users')
@@ -79,6 +87,11 @@ module.exports = {
   singleByEmail(email) {
     return db('users')
       .where('email', email)
+      .first();
+  },
+  viewSingle(id) {
+    return db('users_view')
+      .where('id', id)
       .first();
   },
 

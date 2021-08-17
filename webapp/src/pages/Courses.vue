@@ -47,7 +47,9 @@ async function searchCourses() {
 }
 
 // Get course list
-await searchCourses()
+onMounted(async () => {
+  await searchCourses()
+})
 
 // Watch query params to refetch course list
 watch(() => route.query, async () => {

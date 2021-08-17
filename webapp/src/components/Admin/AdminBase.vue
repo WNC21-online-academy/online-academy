@@ -1,20 +1,24 @@
 <template>
-  <div class="relative flex justify-end mt-4 px-5">
+  <div
+    class="relative flex flex-col sm:flex-row items-end justify-end space-x-4 space-y-4 sm:space-y-0 mt-4 px-5"
+  >
     <button
       v-if="enableAdd"
       type="button"
-      class="flex flex-none text-white px-3 py-2 rounded font-medium mx-3 bg-blue-800 hover:bg-blue-600 transition duration-200 each-in-out focus:outline-none"
-      @click="onToggleWritableDetail(true); onToggleModalDetail(true)"
+      class="flex flex-none text-white px-3 py-2 rounded font-medium bg-blue-800 hover:bg-blue-600 transition duration-200 each-in-out focus:outline-none"
+      @click="onClickBtnAdd"
     >
       <PlusIcon class="mr-1" />Thêm mới
     </button>
     <input
+      v-model="state.keyword"
       type="search"
-      class="bg-gray-200 shadow rounded border-0 pl-3 pr-10 py-2 outline-none"
-      placeholder="Tìm kiếm..."
+      class="w-full sm:w-auto bg-gray-200 shadow rounded border-0 pl-3 pr-10 py-2 outline-none"
+      placeholder="Tìm theo tên..."
+      @keyup.enter="onSearch"
     />
-    <a class="absolute pin-r pin-t mt-2 mr-3 text-gray-400 hover:text-gray-700">
-      <SearchIcon />
+    <a class="absolute bottom-2 right-8 text-gray-400 hover:text-gray-700 p-0">
+      <SearchIcon @click="onSearch" />
     </a>
   </div>
   <Table
@@ -25,9 +29,11 @@
     :enableEdit="enableEdit"
     :enableRead="enableRead"
     :enableRemove="enableRemove"
+    :enableRedirectDetail="enableRedirectDetail"
     @onEdit="onShowEditor"
     @onRead="onShowDetail"
     @onRemove="onShowConfirmRemove"
+    @onRedirectDetail="onRedirectDetail"
   />
 
   <component
@@ -71,13 +77,15 @@ const props = defineProps({
   enableAdd: Boolean,
   enableEdit: Boolean,
   enableRead: Boolean,
-  enableRemove: Boolean
+  enableRemove: Boolean,
+  enableRedirectDetail: Boolean
 })
 
 // State
 const state = reactive({
   list: [],
   count: 0,
+  keyword: '',
   showModalDetail: false,
   showModalRemove: false,
   writableDetail: false
@@ -96,12 +104,18 @@ const currentPage = computed(function () {
 
 // Function get course list 
 async function fetchDataToState() {
+  if (!props.fetchData) {
+    return
+  }
   const searchResult = await props.fetchData({
     keyword: route.query.keyword,
     // orderBy: route.query.order_by,
     limit: perPage,
     offset: perPage * (currentPage.value - 1)
   })
+  if (searchResult.message) {
+    router.push('/404')
+  }
   state.list = searchResult.list
   state.count = searchResult.count
 }
@@ -109,6 +123,26 @@ async function fetchDataToState() {
 // events
 function resetFormData() {
   Object.keys(formData).forEach(key => formData[key] = null);
+}
+
+function onSearch() {
+  const { keyword } = state
+  router.replace({
+    path: route.path,
+    query: {
+      keyword
+    }
+  })
+}
+
+function onClickBtnAdd() {
+  if (props.detailComponent) {
+    onToggleWritableDetail(true)
+    onToggleModalDetail(true)
+  }
+  else {
+    onRedirectDetail()
+  }
 }
 
 function onToggleModalDetail(value = false) {
@@ -137,6 +171,9 @@ function onShowDetail(item) {
 function onShowConfirmRemove(item) {
   onSelectItem(item)
   onToggleModalRemove(true)
+}
+function onRedirectDetail(id) {
+  router.push(`${route.path}/${id}`)
 }
 
 function onAdded(item) {
@@ -184,7 +221,7 @@ watch(() => state.showModalDetail, () => {
     onToggleWritableDetail(false)
     document.body.style.overflow = 'auto'
   }
-  else{
+  else {
     document.body.style.overflow = 'hidden'
   }
 })
