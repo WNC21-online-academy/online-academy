@@ -9,7 +9,7 @@ module.exports = {
 
   async listByCourse(kw, courseId, orderBy, offset, limit) {
     if (!courseId) {
-      return await null;
+      return null;
     }
     let keywordPieces = '';
     if (kw) {

@@ -203,7 +203,7 @@ function checkPassword(pw) {
   state.pwError = ''
   return true
 }
-function checkProfile(pw) {
+function checkProfile() {
   state.profileSuccess = ''
   if (!state.fullname || !state.email) {
     state.profileError = 'Không được để trống'

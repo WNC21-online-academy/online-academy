@@ -16,7 +16,7 @@ router.get('/belong-to/:courseId', authMdw, async function (req, res) {
   const { courseId } = req.params;
   const { keyword, offset, limit } = req.query;
   let orderBy = [{
-    column: 'updated_at',
+    column: 'sort_order',
     order: 'desc'
   }];
   const { count, list } = await lessonModel.listByCourse(keyword, courseId, orderBy, +offset, +limit);

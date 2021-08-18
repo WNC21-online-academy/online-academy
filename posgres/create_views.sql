@@ -36,3 +36,10 @@ CREATE VIEW Lessons_View AS
 SELECT les.*, cou.name as name_course
 FROM Lessons AS les
 LEFT JOIN Courses AS cou ON cou.id = les.id_course;
+
+-- Create rating view
+DROP VIEW IF EXISTS Rating_View CASCADE;
+CREATE VIEW Rating_View AS
+SELECT rat.*, usr.fullname as name_student, usr.avatar as avatar_student
+FROM Rating AS rat
+LEFT JOIN Users AS usr ON usr.id = rat.id_student;

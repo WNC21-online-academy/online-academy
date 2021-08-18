@@ -1,10 +1,10 @@
 <template>
   <div class="border-b tab">
     <div class="border-l-2 border-transparent relative">
-      <header class="flex justify-between items-center p-5 select-none tab-label space-x-2">
+      <div class="flex justify-between items-center p-5 select-none tab-label space-x-2">
         <input
           v-model="state.keyword"
-          class="flex-grow h-10 px-3 rounded focus:outline-none focus:shadow-outline px-8 shadow-lg"
+          class="flex-grow h-10 px-3 rounded border-gray-100 focus:outline-none focus:shadow-outline px-8 shadow-sm"
           type="search"
           placeholder="Tìm kiếm khóa học..."
         />
@@ -19,7 +19,7 @@
           class="flex-none bg-gray-700 text-white px-6 py-2 rounded font-medium mx-3 hover:bg-gray-800 transition duration-200 each-in-out"
           @click="onClickSearch"
         >Tìm kiếm</button>
-      </header>
+      </div>
 
       <div
         v-show="state.showAdvancedSearch"

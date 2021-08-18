@@ -58,6 +58,7 @@ module.exports = {
       .where('id', id)
       .first();
   },
+
   async listByCreator(kw, creatorId, orderBy, offset, limit) {
     if (!creatorId) {
       return null
@@ -76,6 +77,62 @@ module.exports = {
     const count = await db('courses_view')
       .whereRaw(keywordPieces ? `name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
       .whereRaw(creatorId ? `id_created_by = ${creatorId}` : '')
+      .count('*', { as: 'count' });
+
+    return {
+      count: +count[0].count,
+      list
+    };
+  },
+
+  async listByStudent(kw, userId, orderBy, offset, limit) {
+    if (!userId) {
+      return null
+    }
+    let keywordPieces = '';
+    if (kw) {
+      keywordPieces = kw.trim().toLowerCase().replace(/\s+/g, "|");
+    }
+
+    const list = await db('courses_view')
+      .join('course_details', 'course_details.id_course', 'courses_view.id')
+      .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .andWhere('course_details.id_user', userId)
+      .orderBy(orderBy)
+      .limit(limit)
+      .offset(offset);
+    const count = await db('courses_view')
+      .join('course_details', 'course_details.id_course', 'courses_view.id')
+      .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .andWhere('course_details.id_user', userId)
+      .count('*', { as: 'count' });
+
+    return {
+      count: +count[0].count,
+      list
+    };
+  },
+
+  async listByWatchlist(kw, userId, orderBy, offset, limit) {
+    if (!userId) {
+      return null
+    }
+    let keywordPieces = '';
+    if (kw) {
+      keywordPieces = kw.trim().toLowerCase().replace(/\s+/g, "|");
+    }
+
+    const list = await db('courses_view')
+      .join('watchlists', 'watchlists.id_course', 'courses_view.id')
+      .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .andWhere('watchlists.id_user', userId)
+      .orderBy(orderBy)
+      .limit(limit)
+      .offset(offset);
+    const count = await db('courses_view')
+      .join('watchlists', 'watchlists.id_course', 'courses_view.id')
+      .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .andWhere('watchlists.id_user', userId)
       .count('*', { as: 'count' });
 
     return {

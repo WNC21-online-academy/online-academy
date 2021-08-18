@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-auto relative flex items-center justify-items-center bg-gray-500">
+  <div class="w-full h-auto relative flex items-center justify-items-center bg-gray-500  shadow-sm rounded">
     <div>
       <img :src="item.thumbnail" class="object-cover w-full h-96 rounded p-0 p-0 mix-blend-overlay" />
       <div class="absolute flex items-center justify-items-center bottom-0 max-w-full w-48"></div>
@@ -13,7 +13,7 @@
         <div>
           <button
             type="button"
-            class="flex-none text-white px-6 py-2 rounded font-medium mx-3 bg-blue-800 hover:bg-blue-600 transition duration-200 each-in-out focus:outline-none"
+            class="flex-none text-white px-6 py-2 rounded font-medium mx-3 bg-blue-600 hover:bg-blue-500 transition duration-200 each-in-out focus:outline-none"
             @click="onClickJoin(item.id)"
           >Tham gia ngay</button>
         </div>

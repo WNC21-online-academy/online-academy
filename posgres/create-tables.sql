@@ -88,11 +88,10 @@ CREATE TABLE Rating (
   id_course INT NOT NULL,
   id_student INT NOT NULL,
   score FLOAT NOT NULL DEFAULT 0,
-  comment VARCHAR(100),
+  comment VARCHAR(1000),
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_rating_courses FOREIGN KEY (id_course) REFERENCES Courses (id),
-  CONSTRAINT fk_rating_users FOREIGN KEY (id_student) REFERENCES Users (id),
-  UNIQUE (id_course, id_student)
+  CONSTRAINT fk_rating_users FOREIGN KEY (id_student) REFERENCES Users (id)
 );
 CREATE TRIGGER set_updated_at_rating
 BEFORE INSERT OR UPDATE ON Rating
@@ -156,38 +155,39 @@ EXECUTE FUNCTION update_col_trig();
 -- FOR EACH ROW
 -- EXECUTE FUNCTION update_col_trig();
 
--- User course detail table
-DROP TABLE IF EXISTS UserCourseDetails CASCADE;
-CREATE TABLE UserCourseDetails (
+-- Course detail table
+DROP TABLE IF EXISTS Course_Details CASCADE;
+CREATE TABLE Course_Details (
   id_user INT NOT NULL,
   id_course INT NOT NULL,
-  is_watchlist BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id_user, id_course),
-  CONSTRAINT fk_ucdetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
-  CONSTRAINT fk_ucdetails_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
+  CONSTRAINT fk_coursedetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
+  CONSTRAINT fk_coursedetails_courses FOREIGN KEY (id_course) REFERENCES Courses (id),
+  UNIQUE (id_user, id_course)
 );
-CREATE TRIGGER set_updated_at_ucdetails
-BEFORE INSERT OR UPDATE ON UserCourseDetails
+CREATE TRIGGER set_updated_at_coursedetails
+BEFORE INSERT OR UPDATE ON Course_Details
 FOR EACH ROW
 EXECUTE FUNCTION update_col_trig();
 
--- User lesson detail table
--- DROP TABLE IF EXISTS UserLessonDetails CASCADE;
--- CREATE TABLE UserLessonDetails (
---   id_user INT NOT NULL,
---   id_lesson INT NOT NULL,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   PRIMARY KEY (id_user, id_lesson),
---   CONSTRAINT fk_uldetails_users FOREIGN KEY (id_user) REFERENCES Users (id),
---   CONSTRAINT fk_uldetails_lessons FOREIGN KEY (id_lesson) REFERENCES Lessons (id)
--- );
--- CREATE TRIGGER set_updated_at_uldetails
--- BEFORE INSERT OR UPDATE ON UserLessonDetails
--- FOR EACH ROW
--- EXECUTE FUNCTION update_col_trig();
+-- Watchlist table
+DROP TABLE IF EXISTS WatchLists CASCADE;
+CREATE TABLE WatchLists (
+  id_user INT NOT NULL,
+  id_course INT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_user, id_course),
+  CONSTRAINT fk_watchlists_users FOREIGN KEY (id_user) REFERENCES Users (id),
+  CONSTRAINT fk_watchlists_courses FOREIGN KEY (id_course) REFERENCES Courses (id),
+  UNIQUE (id_user, id_course)
+);
+CREATE TRIGGER set_updated_at_watchlists
+BEFORE INSERT OR UPDATE ON WatchLists
+FOR EACH ROW
+EXECUTE FUNCTION update_col_trig();
 
 -- Refresh tokens table
 DROP TABLE IF EXISTS RefreshTokens CASCADE;

@@ -218,7 +218,7 @@ function onSelectCategory(payload) {
   state.name_category = payload?.name
 }
 
-function checkCourse(pw) {
+function checkCourse() {
   message.formSuccess = ''
   if (!state.name) {
     message.formError = 'Chưa nhập tên'

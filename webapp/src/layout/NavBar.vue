@@ -76,6 +76,7 @@
           </div>
         </li>
       </template>
+
       <template v-if="store.getters.isTeacher()">
         <li class="text-gray-500 hover:text-gray-700">
           <router-link
@@ -87,9 +88,7 @@
           </router-link>
         </li>
       </template>
-      <template v-if="store.getters.isStudent()">
-        <div>student</div>
-      </template>
+
       <!-- Categories -->
       <li class="text-gray-500 hover:text-gray-700">
         <a
@@ -161,23 +160,23 @@
         </div>
       </li>
 
-      <!-- Favorite courses -->
-      <li class="m-0">
-        <router-link
-          to="/favorite"
-          class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer text-gray-500 hover:text-gray-700 no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
-          :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'favorite' }"
-        >Ưa thích</router-link>
-      </li>
-
-      <!-- Joined courses -->
-      <template v-if="!store.getters.isTeacher() && !store.getters.isAdmin()">
+      <template v-if="store.getters.isStudent()">
+        <!-- Joined courses -->
         <li>
           <router-link
             to="/joined"
             class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer text-gray-500 hover:text-gray-700 no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
             :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'joined' }"
           >Đã tham gia</router-link>
+        </li>
+
+        <!-- Favorite courses -->
+        <li class="m-0">
+          <router-link
+            to="/favorite"
+            class="flex items-center h-10 leading-10 px-4 rounded text-base cursor-pointer text-gray-500 hover:text-gray-700 no-underline hover:no-underline transition-colors duration-100 mx-1 hover:bg-gray-100"
+            :class="{ 'border-b-2 border-blue-500 text-gray-800': route.name === 'favorite' }"
+          >Yêu thích</router-link>
         </li>
       </template>
     </ul>

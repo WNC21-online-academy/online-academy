@@ -158,7 +158,7 @@ const formatField = (item, field) => {
       return field.falseValue
     case 'datetime':
       if (Date.parse(value) !== NaN)
-        return toDatetime(new Date(value))
+        return toDatetime(value)
     case 'currency':
       return toCurrency(value)
     default: return value

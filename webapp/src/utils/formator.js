@@ -8,4 +8,4 @@ export const toDatetime = str => new Intl.DateTimeFormat('vi-VN', {
   hour: 'numeric', minute: 'numeric',
   hour12: false,
   timeZone: 'Asia/Ho_Chi_Minh'
-}).format(str)
+}).format(new Date(str))

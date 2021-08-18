@@ -4,6 +4,9 @@ import SignUpPage from '../pages/SignUp.vue'
 import HomePage from '../pages/Home.vue'
 import CoursesPage from '../pages/Courses.vue'
 import CoursePage from '../pages/Course.vue'
+import LessonPage from '../pages/Lesson.vue'
+import JoinedCoursesPage from '../pages/Joined.vue'
+import FavoriteCoursesPage from '../pages/Favorite.vue'
 import CategoriesAdminPage from '../pages/Admin/Categories.vue'
 import CoursesAdminPage from '../pages/Admin/Courses.vue'
 import TeachersAdminPage from '../pages/Admin/Teachers.vue'
@@ -41,21 +44,29 @@ export default [
   {
     path: '/search',
     component: CoursesPage,
+    name: 'search',
     // meta: { auth: true }
   },
   {
     path: '/courses/:id',
     component: CoursePage,
+    name: 'course-detail',
+    // meta: { auth: true }
+  },
+  {
+    path: '/courses/:id/:lessonId',
+    component: LessonPage,
+    name: 'lesson-detail',
     // meta: { auth: true }
   },
   {
     path: '/favorite',
-    component: CoursesPage,
+    component: FavoriteCoursesPage,
     name: 'favorite'
   },
   {
     path: '/joined',
-    component: CoursesPage,
+    component: JoinedCoursesPage,
     name: 'joined'
   },
   // meta: { auth: true, role: 'admin' },

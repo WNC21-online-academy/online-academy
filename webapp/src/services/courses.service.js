@@ -96,6 +96,54 @@ export const fetchAllByTeacher = async ({ keyword, limit, offset }) => {
   }
 }
 
+export const fetchAllByWatchlist = async ({ limit, offset }) => {
+  try {
+    const params = {
+      limit,
+      offset
+    }
+    const response = await axiosInstance.get(`/courses/watchlist`, { params });
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+    return null;
+  } catch (error) {
+    if (error?.response?.status === 401) {
+      return {
+        message: "Không đủ quyền"
+      }
+    }
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
+}
+
+export const fetchAllJoined = async ({ limit, offset }) => {
+  try {
+    const params = {
+      limit,
+      offset
+    }
+    const response = await axiosInstance.get(`/courses/joined`, { params });
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+    return null;
+  } catch (error) {
+    if (error?.response?.status === 401) {
+      return {
+        message: "Không đủ quyền"
+      }
+    }
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
+}
+
 export const addOrUpdate = async data => {
   try {
     const { id, id_category, name, description, content, thumbnail, tutition, is_completed, is_draft } = data;
@@ -138,6 +186,52 @@ export const remove = async ({ id }) => {
   } catch (error) {
     return {
       message: "Lỗi khòa học cò ràng buộc khóa học, không thể xóa."
+    }
+  }
+}
+
+export const addWatchlist = async data => {
+  try {
+    const { id } = data;
+
+    const response = await axiosInstance.post(`/courses/${id}/watchlist`);
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
+}
+
+export const removeWatchlist = async ({ id }) => {
+  try {
+    const response = await axiosInstance.delete(`/courses/${id}/watchlist`);
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi ràng buộc, không thể xóa."
+    }
+  }
+}
+
+export const joinCourse = async data => {
+  try {
+    const { id } = data;
+
+    const response = await axiosInstance.post(`/courses/${id}/join`);
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi hệ thống"
     }
   }
 }

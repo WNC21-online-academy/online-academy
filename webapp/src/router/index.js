@@ -7,6 +7,8 @@ const router = createRouter({
   routes,
 })
 router.beforeEach(async (to, from, next) => {
+  window.scrollTo(0, 0)
+  
   const { authenticated } = useRefreshToken()
 
   if (to.meta.auth === true && !authenticated) {

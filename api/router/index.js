@@ -5,6 +5,7 @@ const userRoutes = require('./routes/users');
 const categoryRoutes = require('./routes/categories');
 const courseRoutes = require('./routes/courses');
 const lessonRoutes = require('./routes/lessons');
+const ratingRoutes = require('./routes/rating');
 
 router.get('/api/v1', function (req, res) {
   res.json({
@@ -17,5 +18,6 @@ router.use('/api/v1/users', userRoutes)
 router.use('/api/v1/categories', categoryRoutes)
 router.use('/api/v1/courses', courseRoutes)
 router.use('/api/v1/lessons', lessonRoutes)
+router.use('/api/v1/rating', ratingRoutes)
 
 module.exports = router;
