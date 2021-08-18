@@ -113,7 +113,7 @@ const sendCoursesDetail = async (senderId, payload) => {
     await base.sendMessage(senderId, `Khuyễn mãi giảm ${(detail.tutition - promo.price) / detail.tutition} từ ${moment(detail.time_begin).format('DD/MM/YYYY')} đến ${moment(detail.time_end).format('DD/MM/YYYY')}`);
   });
 
-  await base.sendButtonUrl(senderId, 'Học online - xu thế 4.0', 'Tham gia ngay', detail.url);
+  await base.sendButtonUrl(senderId, 'Học online - xu thế 4.0', 'Tham gia ngay', detail.url || webUrl);
 }
 
 module.exports = {

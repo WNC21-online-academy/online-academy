@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 app.use(router);
 
 // Listen running app 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, function () {
   console.log(`Online academy api is running at port ${PORT}`);
 })

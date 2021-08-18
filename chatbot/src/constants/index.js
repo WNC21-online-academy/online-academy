@@ -16,6 +16,7 @@ const payloadCategoryPrefix = 'CATEGORIESBY_';
 const payloadCoursePrefix = 'COURSESBY_';
 const payloadCourseDetailPrefix = 'COURSESDETAIL_';
 const payloadPagePrefix = 'PAGE_';
+const webUrl = ''
 
 module.exports = {
   defaultPort,
