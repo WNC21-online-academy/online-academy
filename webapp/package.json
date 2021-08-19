@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^29.1.0",
