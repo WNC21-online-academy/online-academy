@@ -25,7 +25,8 @@ import { logout } from '../services/auth.service'
 
 const store = inject('store')
 const router = useRouter()
-const menu = reactive(store.getters.menu())
+
+const menu = computed(() => store.getters.menu())
 
 // declare navbar dropdown variable
 const showCategoriesChildren = ref(false)

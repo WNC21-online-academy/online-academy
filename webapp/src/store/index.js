@@ -6,7 +6,7 @@ import * as contants from '../utils/contants';
 const state = reactive({
   authenticated: !!(localStorage.onlineAcademy_refreshToken && localStorage.onlineAcademy_accessToken && Date.now() < localStorage.onlineAcademy_expiresIn),
   user: JSON.parse(localStorage.onlineAcademy_user || null),
-  categories: (fetchAll())?.list
+  categories: []
 })
 
 const methods = {
@@ -18,6 +18,10 @@ const methods = {
   },
   setCategories(payload) {
     state.categories = payload
+  },
+  async loadCategories() {
+    const result = await fetchAll()
+    state.categories = result?.list
   }
 }
 
@@ -33,7 +37,7 @@ const getters = {
   },
   menu() {
     const groups = _.groupBy(state.categories, 'id_parent')
-    const menu = groups[null];
+    const menu = groups[null] || []
     return _.map(menu.reverse(), item => ({ ...item, children: groups[item.id] }));
   },
   categoryChildren() {

@@ -44,25 +44,3 @@ export const add = async data => {
   }
 }
 
-
-export const uploadVideo = async (data, onUploadProgress) => {
-  try {
-    const { id, video } = data;
-    const formData = new FormData;
-    formData.append('video', video)
-    const response = await axiosInstance.put(`/lessons/${id}/video`,
-      formData,
-      {
-        onUploadProgress
-      });
-    console.log('uploadVideo response', response);
-    if (response.status = 200) {
-      const { data } = response;
-      return data;
-    }
-  } catch (error) {
-    return {
-      message: error.response.message || "Lỗi hệ thống"
-    }
-  }
-}

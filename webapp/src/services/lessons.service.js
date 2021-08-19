@@ -85,7 +85,6 @@ export const uploadVideo = async (data, onUploadProgress) => {
       {
         onUploadProgress
       });
-    console.log('uploadVideo response', response);
     if (response.status = 200) {
       const { data } = response;
       return data;
