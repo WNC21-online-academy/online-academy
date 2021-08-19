@@ -6,7 +6,7 @@ import * as contants from '../utils/contants';
 const state = reactive({
   authenticated: !!(localStorage.onlineAcademy_refreshToken && localStorage.onlineAcademy_accessToken && Date.now() < localStorage.onlineAcademy_expiresIn),
   user: JSON.parse(localStorage.onlineAcademy_user || null),
-  categories: (await fetchAll())?.list
+  categories: (fetchAll())?.list
 })
 
 const methods = {
