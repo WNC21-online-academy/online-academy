@@ -16,7 +16,7 @@ const payloadCategoryPrefix = 'CATEGORIESBY_';
 const payloadCoursePrefix = 'COURSESBY_';
 const payloadCourseDetailPrefix = 'COURSESDETAIL_';
 const payloadPagePrefix = 'PAGE_';
-const webUrl = ''
+const webUrl = 'https://oawebapp.herokuapp.com/'
 
 module.exports = {
   defaultPort,
@@ -29,5 +29,6 @@ module.exports = {
   payloadCategoryPrefix,
   payloadCoursePrefix,
   payloadCourseDetailPrefix,
-  payloadPagePrefix
+  payloadPagePrefix,
+  webUrl
 }
