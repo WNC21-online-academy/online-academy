@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const secure = require('ssl-express-www');
 const cors = require('cors');
 require('express-async-errors');
 require('dotenv').config();
@@ -12,6 +13,7 @@ const app = express();
 
 // use middlewares
 app.use('/assets', express.static(__dirname + "/assets/uploads"));
+app.use(secure);
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
