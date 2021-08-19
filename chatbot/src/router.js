@@ -18,9 +18,9 @@ router.get('/webhook', (req, res) => {
 });
 
 /* Handle Messaging */
-router.post('/webhook', (req, res) => {
+router.post('/webhook', async (req, res) => {
   const entries = req.body.entry;
-  handler.handleMessage(entries);
+  await handler.handleMessage(entries);
   res.status(200).send("OK");
 });
 
