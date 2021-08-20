@@ -75,7 +75,7 @@
         <div v-if="data.is_joined">
           <LessonList :list="lessons" />
         </div>
-        <div class="p-4">Chưa tham gia khóa học, không thể xem bài giảng</div>
+        <div v-else class="p-4">Chưa tham gia khóa học, không thể xem bài giảng</div>
       </div>
       <div class="lg:w-4/5 mx-auto mt-4 sm:mt-8 space-y-4">
         <h6 class="text-xl font-medium">Phản hồi</h6>

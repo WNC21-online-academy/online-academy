@@ -10,11 +10,11 @@
           class="p-4 hover:bg-gray-50 cursor-pointer"
           @click="onClickLesson(item.id)"
         >
-          <div class>
-            Bài {{ item.sort_order }}
-            <p>{{ item.title }}</p>
+          <div class="font-medium">
+            Bài {{ item.sort_order }}:
+            {{ item.title }}
           </div>
-          <div class>Cập nhật: {{ toDatetime(item.updated_at) }}</div>
+          <div class="text-sm">Cập nhật: {{ toDatetime(item.updated_at) }}</div>
         </li>
       </ul>
     </div>
