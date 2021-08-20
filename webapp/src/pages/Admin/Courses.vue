@@ -1,7 +1,7 @@
 <template>
   <AdminBase
     :fields="fields"
-    :fetchData="fetchAll"
+    :fetchData="fetchCourses"
     :removeItem="remove"
     :detailComponent="CourseDetail"
     enableRead
@@ -26,15 +26,21 @@ const fields = [{
   title: 'Lĩnh vực',
   default: 'Không có'
 }, {
-  key: 'name_teacher',
+  key: 'name_creator',
   title: 'Giáo viên'
 }, {
   key: 'registed',
   title: 'Số lượng học viên',
   default: 0
 }, {
-  key: 'tutition',
-  title: 'Học phí',
-  type: 'currency'
+  key: 'is_suspended',
+  title: 'Trạng thái',
+  type: 'boolean',
+  trueValue: 'Đình chỉ',
+  falseValue: 'Hoạt động'
 }]
+
+function fetchCourses() {
+  return fetchAll(Object.assign({}, ...arguments, { is_suspended: true }))
+}
 </script>

@@ -1,7 +1,7 @@
 const db = require('../utils/db');
 
 module.exports = {
-  async search(kw, catId, orderBy, offset, limit) {
+  async search(kw, catId, orderBy, offset, limit, showSuspended) {
     let keywordPieces = '';
     if (kw) {
       keywordPieces = kw.trim().toLowerCase().replace(/\s+/g, "|");
@@ -10,12 +10,14 @@ module.exports = {
     const list = await db('courses_view')
       .whereRaw(keywordPieces ? `name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
       .whereRaw(catId ? `id_category = ${catId}` : '')
+      .whereRaw(!showSuspended ? 'is_suspended is not true' : '')
       .orderBy(orderBy)
       .limit(limit)
       .offset(offset);
     const count = await db('courses_view')
       .whereRaw(keywordPieces ? `name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
       .whereRaw(catId ? `id_category = ${catId}` : '')
+      .whereRaw(!showSuspended ? 'is_suspended is not true' : '')
       .count('*', { as: 'count' });
 
     return {
@@ -24,32 +26,37 @@ module.exports = {
     };
   },
   listTopHot(offset, limit) {
-    return db('courses')
-      .orderBy('view_count', 'desc')
+    return db('courses_view')
+      .whereRaw('is_suspended is not true')
+      .orderBy('counter_students', 'desc')
       .limit(limit)
       .offset(offset);
   },
   listTopView(offset, limit) {
-    return db('courses')
+    return db('courses_view')
+      .whereRaw('is_suspended is not true')
       .orderBy('view_count', 'desc')
       .limit(limit)
       .offset(offset);
   },
   listTopNew(offset, limit) {
-    return db('courses')
-      .orderBy('view_count', 'desc')
+    return db('courses_view')
+      .whereRaw('is_suspended is not true')
+      .orderBy('created_at', 'desc')
       .limit(limit)
       .offset(offset);
   },
   listTopEnroll(offset, limit) {
-    return db('courses')
-      .orderBy('view_count', 'desc')
+    return db('courses_view')
+      .leftJoin('course_details', 'course_details.id_course', 'courses_view.id')
+      .whereRaw('is_suspended is not true')
+      .orderBy('course_details.updated_at', 'desc')
       .limit(limit)
       .offset(offset);
   },
   listTopRelated(id, offset, limit) {
-    return db('courses')
-      .orderBy('view_count', 'desc')
+    return db('courses_view')
+      .whereRaw('is_suspended is not true')
       .limit(limit)
       .offset(offset);
   },
@@ -125,6 +132,7 @@ module.exports = {
     const list = await db('courses_view')
       .join('watchlists', 'watchlists.id_course', 'courses_view.id')
       .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .whereRaw('is_suspended is not true')
       .andWhere('watchlists.id_user', userId)
       .orderBy(orderBy)
       .limit(limit)
@@ -132,9 +140,9 @@ module.exports = {
     const count = await db('courses_view')
       .join('watchlists', 'watchlists.id_course', 'courses_view.id')
       .whereRaw(keywordPieces ? `courses_view.name_tsv @@ unaccent('${keywordPieces}')::tsquery` : '')
+      .whereRaw('is_suspended is not true')
       .andWhere('watchlists.id_user', userId)
       .count('*', { as: 'count' });
-
     return {
       count: +count[0].count,
       list

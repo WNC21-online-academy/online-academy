@@ -29,16 +29,12 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(null, async function (error) {
   if (error.response?.status === 401) {
     const { authenticated } = await useRefreshToken()
+    console.log('authenticated :>> ', authenticated);
     if (!authenticated) {
       router.push('/sign-in')
       return
     }
     return instance(error.config)
-    // return Promise.reject({
-    //   response: {
-    //     ...error.response, message: "Hãy thử lại"
-    //   }
-    // });
   }
   return Promise.reject(error);
 });

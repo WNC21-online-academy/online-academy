@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { inject, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router'
 import CardInfo from '../components/Detail/CardInfo.vue';
 import { fetchById } from '../services/courses.service';
@@ -19,6 +19,8 @@ import { fetchAllByCourse as fetchLessons } from '../services/lessons.service';
 import { fetchByCourse as fetchComments } from '../services/rating.service';
 
 const route = useRoute()
+
+const store = inject('store')
 
 // State
 const state = reactive({
@@ -37,7 +39,11 @@ async function getData() {
 }
 
 async function getDetail(id) {
-  state.course = await fetchById({ id: id || route.params.id })
+  const payload = {
+    id: id || route.params.id,
+    userId: store.state.user?.id
+  }
+  state.course = await fetchById(payload)
 }
 async function getLessons(courseId) {
   const res = await fetchLessons({ id: courseId || route.params.id })

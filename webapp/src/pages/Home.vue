@@ -2,24 +2,24 @@
   <SearchBox />
   <div class="py-5">
     <h3 class="px-5 text-xl font-semibold text-gray-700">Khóa học nổi bật</h3>
-    <Slide class="py-2" :list="state.topHot" />
+    <Slide class="py-4" :list="state.topHot" />
   </div>
   <div class="py-5">
     <h3 class="px-5 my-3 text-xl font-semibold text-gray-700">Khóa học nhiều người quan tâm</h3>
-    <Carousel class="mx-5" :list="state.topView" />
+    <Carousel class="mx-5 py-4" :list="state.topView" />
   </div>
   <div class="py-5">
     <h3 class="px-5 my-3 text-xl font-semibold text-gray-700">Khóa học mới</h3>
-    <Carousel class="mx-5" :list="state.topNew" />
+    <Carousel class="mx-5 py-4" :list="state.topNew" />
   </div>
   <div class="py-5">
     <h3 class="px-5 my-3 text-xl font-semibold text-gray-700">Khóa học phổ biến trong tuần</h3>
-    <Carousel class="mx-5" :list="state.topWeek" />
+    <Carousel class="mx-5 py-4" :list="state.topWeek" />
   </div>
-  <div class="py-5">
+  <!-- <div class="py-5">
     <h3 class="px-5 my-3 text-xl font-semibold text-gray-700">Khóa học liên quan</h3>
-    <Carousel class="mx-5" :list="state.topRelated" />
-  </div>
+    <Carousel class="mx-5 py-4" :list="state.topRelated" />
+  </div> -->
 </template>
 
 <script setup>

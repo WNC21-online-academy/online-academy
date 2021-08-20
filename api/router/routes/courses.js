@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const validateMdw = require('../../middlewares/validate.mdw');
+const coursesSchema = require('../../schema/courses/addOrUpdate.json');
 const { uploadImages } = require('../../middlewares/file-upload.mdw')
 const courseModel = require('../../models/course.model');
 const categoryModel = require('../../models/category.model');
@@ -40,25 +42,25 @@ router.get('/search', async function (req, res) {
   }];
   switch (order_by) {
     case 'rate_desc':
-      orderBy.push({
+      orderBy.unshift({
         column: 'rating',
         order: 'desc'
       });
       break;
     case 'rate_asc':
-      orderBy.push({
+      orderBy.unshift({
         column: 'rating',
         order: 'asc'
       });
       break;
     case 'tutition_desc':
-      orderBy.push({
+      orderBy.unshift({
         column: 'tutition',
         order: 'desc'
       });
       break;
     case 'tutition_asc':
-      orderBy.push({
+      orderBy.unshift({
         column: 'tutition',
         order: 'asc'
       });
@@ -147,23 +149,31 @@ router.get('/by-creator', authMdw, async function (req, res) {
 
 // Fetch all
 router.get('/', async function (req, res) {
-  const { keyword, offset, limit } = req.query;
+  const { is_suspended, keyword, offset, limit } = req.query;
+  const showSuspended = is_suspended === 'true'
   let orderBy = [{
     column: 'updated_at',
     order: 'desc'
   }];
-  const { count, list } = await courseModel.search(keyword, null, orderBy, +offset, +limit);
+  const { count, list } = await courseModel.search(keyword, null, orderBy, +offset, +limit, showSuspended);
   res.json({ count, list });
 })
 
 // Fetch by id
-router.get('/:id', authMdw, async function (req, res) {
+router.get('/:id', async function (req, res) {
   const { id } = req.params;
-  const { userId } = req.accessTokenPayload;
-  const course = await courseModel.single(id);
-  const in_watchlist = await watchlistModel.single(userId, id);
-  const is_joined = await courseDetailModel.single(userId, id);
-  res.json({ ...course, in_watchlist: !!in_watchlist, is_joined: !!is_joined });
+  const { userId } = req.query;
+  const result = await courseModel.single(id);
+  if (userId > 0) {
+    result.in_watchlist = !!(await watchlistModel.single(userId, id));
+    result.is_joined = !!(await courseDetailModel.single(userId, id));
+  }
+  let view_count
+  if (result.id > 0) {
+    view_count = result.view_count + 1
+    await courseModel.update(result.id, { view_count })
+  }
+  res.status(200).json({ ...result, view_count });
 })
 
 // Add 

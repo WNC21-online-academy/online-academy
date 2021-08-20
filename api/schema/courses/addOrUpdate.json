@@ -1,0 +1,36 @@
+{
+  "required": [
+    "name",
+    "id_category"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "id_category": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "type": "string"
+    },
+    "tutition": {
+      "type": "string"
+    },
+    "is_completed": {
+      "type": "boolean"
+    },
+    "is_draft": {
+      "type": "boolean"
+    },
+    "is_suspended": {
+      "type": "boolean"
+    }
+  }
+}

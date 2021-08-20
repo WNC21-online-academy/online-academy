@@ -2,7 +2,7 @@
   <!-- Modal Background -->
   <div
     v-show="showModal"
-    class="absolute text-gray-500 flex justify-center overflow-auto z-50 bg-black bg-opacity-40 top-0"
+    class="fixed text-gray-500 flex justify-center overflow-auto z-50 bg-black bg-opacity-40 top-0"
     @scroll.prevent
   >
     <!-- Modal -->
@@ -17,23 +17,32 @@
       </span>
       <!-- Form -->
       <div class="flex flex-wrap">
-        <div class="md:w-1/2 p-3">
+        <div class="w-full px-3 pb-4">
+          <label class="font-semibold text-sm text-gray-600">Đình chỉ khóa học</label>
+          <input
+            v-model="state.is_suspended"
+            type="checkbox"
+            class="focus:ring-indigo-500 ml-4 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+            @change="onClickSuspend"
+          />
+        </div>
+        <div class="md:w-1/2 px-3">
           <label
-            v-show="formData.id"
+            v-show="state.id"
             class="font-semibold text-sm text-gray-600 pb-1 block"
           >Mã khóa học</label>
           <input
-            v-show="formData.id"
-            v-model="formData.id"
+            v-show="state.id"
+            v-model="state.id"
             type="text"
             class="border rounded-lg px-3 py-2 text-sm w-full"
             disabled
           />
         </div>
-        <div class="md:w-1/2 p-3">
+        <div class="md:w-1/2 px-3">
           <label class="font-semibold text-sm text-gray-600 pb-1 block">Tên khóa</label>
           <input
-            v-model="formData.name"
+            v-model="state.name"
             type="text"
             class="border rounded-lg px-3 py-2 text-sm w-full"
             label
@@ -45,16 +54,48 @@
           <CategoriesBox
             class="flex-grow"
             :list="categories"
-            :selectedItem="{ id: formData.id_category, name: formData.name_category }"
+            :selectedItem="{ id: state.id_category, name: state.name_category }"
             defaultTitle="Không"
             @onSelect="onSelectCategory"
             :disabled="!writable"
           />
         </div>
-        <div class="md:w-1/2 p-3">
+        <div class="md:w-1/2 px-3">
           <label class="font-semibold text-sm text-gray-600 pb-1 block">Giáo viên phụ trách</label>
           <input
-            v-model="formData.name_creator"
+            v-model="state.name_creator"
+            type="text"
+            class="border rounded-lg px-3 py-2 text-sm w-full"
+            label
+            :disabled="!writable"
+          />
+        </div>
+        <div class="md:w-1/2 px-3">
+          <label class="font-semibold text-sm text-gray-600 pb-1 block">Mô tả</label>
+          <textarea
+            v-model="state.description"
+            type="text"
+            class="border rounded-lg px-3 py-2 text-sm w-full"
+            rows="4"
+            cols="50"
+            :disabled="!writable"
+          />
+        </div>
+        <div class="md:w-1/2 px-3">
+          <label class="font-semibold text-sm text-gray-600 pb-1 block">Nội dung</label>
+          <textarea
+            v-model="state.content"
+            type="text"
+            class="border rounded-lg px-3 py-2 text-sm w-full"
+            rows="4"
+            cols="50"
+            :disabled="!writable"
+          />
+        </div>
+        <div class="md:w-1/2 px-3">
+          <label class="font-semibold text-sm text-gray-600 pb-1 block">Học phí</label>
+          <input
+            v-model="state.tutition"
             type="text"
             class="border rounded-lg px-3 py-2 text-sm w-full"
             label
@@ -62,32 +103,10 @@
           />
         </div>
         <div class="md:w-1/2 p-3">
-          <label class="font-semibold text-sm text-gray-600 pb-1 block">Mô tả</label>
-          <textarea
-            v-model="formData.description"
-            type="text"
-            class="border rounded-lg px-3 py-2 text-sm w-full"
-            rows="4"
-            cols="50"
-            :disabled="!writable"
-          />
-        </div>
-        <div class="md:w-1/2 p-3">
-          <label class="font-semibold text-sm text-gray-600 pb-1 block">Nội dung</label>
-          <textarea
-            v-model="formData.content"
-            type="text"
-            class="border rounded-lg px-3 py-2 text-sm w-full"
-            rows="4"
-            cols="50"
-            :disabled="!writable"
-          />
-        </div>
-        <div class="md:w-1/2 p-3">
-          <label class="font-semibold text-sm text-gray-600 pb-1 block">Học phí</label>
+          <label class="font-semibold text-sm text-gray-600 pb-1 block">Lượt xem</label>
           <input
-            v-model="formData.tutition"
-            type="text"
+            v-model="state.view_count"
+            type="number"
             class="border rounded-lg px-3 py-2 text-sm w-full"
             label
             :disabled="!writable"
@@ -96,22 +115,14 @@
         <div class="md:w-1/2 p-3">
           <label class="font-semibold text-sm text-gray-600 pb-1 block">Hoàn thành</label>
           <div
-            class="border rounded-lg px-3 py-2 text-sm w-full"
-          >{{ formData.is_completed ? 'Đã hoàn thành' : 'Chưa hoàn thành' }}</div>
+            class="px-3 py-2 text-sm w-full"
+          >{{ state.is_completed ? 'Đã hoàn thành' : 'Chưa hoàn thành' }}</div>
         </div>
         <div class="md:w-1/2 p-3">
-          <label class="font-semibold text-sm text-gray-600 pb-1 block">Lượt xem</label>
-          <input
-            v-model="formData.view_count"
-            type="number"
-            class="border rounded-lg px-3 py-2 text-sm w-full"
-            label
-            :disabled="!writable"
-          />
-        </div>
-        <div class="md:w-1/2 p-3">
-          <label class="font-semibold text-sm text-gray-600 pb-1 block">Đánh giá</label>
-          <div class="border rounded-lg px-3 py-2 text-sm w-full">{{ formData.rating }}</div>
+          <label class="font-semibold text-sm text-gray-600 pb-1 block">Đánh giá trung binh</label>
+          <div
+            class="px-3 py-2 text-sm w-full"
+          >{{ state.rating ? `${state.rating} điểm` : 'Chưa có đánh giá' }}</div>
         </div>
 
         <p v-show="messageError" class="flex font-medium text-sm text-red-700 py-4">
@@ -140,11 +151,11 @@
 </template>
 
 <script setup>
-import { computed, defineEmit, defineProps, inject, ref, watch } from "vue";
-import WarningIcon from '../../Icons/WarningIcon.vue';
-import CheckIcon from '../../Icons/CheckIcon.vue';
-import CategoriesBox from '../../SearchBox/CategoriesBox.vue';
-// import { addOrUpdate } from '../../../services/categories.service';
+import { computed, defineEmit, defineProps, inject, onMounted, reactive, ref, watch } from "vue";
+import WarningIcon from '../../Icons/WarningIcon.vue'
+import CheckIcon from '../../Icons/CheckIcon.vue'
+import CategoriesBox from '../../SearchBox/CategoriesBox.vue'
+import { fetchById, suspend } from '../../../services/courses.service'
 
 const store = inject('store')
 
@@ -155,10 +166,23 @@ const props = defineProps({
   writable: Boolean
 })
 
+// state
+const state = reactive({
+  is_suspended: false
+})
 
 // error messages
 const messageError = ref()
 const messageSuccess = ref()
+
+// on mounted
+onMounted(async () => {
+  const id = props.formData.id
+  if (id > 0) {
+    const res = await fetchById({ id })
+    await Object.assign(state, res)
+  }
+})
 
 // Handle select parent
 function onSelectCategory(payload) {
@@ -187,6 +211,16 @@ async function onSubmit() {
   else {
     await emit(props.formData.id ? 'onUpdated' : 'onAdded', result)
     messageSuccess.value = 'Đã lưu'
+  }
+}
+
+async function onClickSuspend() {
+  const res = await suspend({
+    id: props.formData.id,
+    is_suspended: state.is_suspended
+  })
+  if (res) {
+    await Object.assign(state, res)
   }
 }
 

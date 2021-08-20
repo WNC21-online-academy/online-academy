@@ -4,10 +4,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const randomstring = require('randomstring');
 const userModel = require('../../models/user.model');
+const authMdw = require('../../middlewares/auth.mdw');
 const validateMdw = require('../../middlewares/validate.mdw');
-const signUpSchema = require('../../schema/signUp.json');
-const signInSchema = require('../../schema/signIn.json');
-const refreshTokenSchema = require('../../schema/refreshToken.json');
+const signUpSchema = require('../../schema/auth/signUp.json');
+const signInSchema = require('../../schema/auth/signIn.json');
+const refreshTokenSchema = require('../../schema/auth/refreshToken.json');
 
 const accessTokenExpireSeconds = 600;
 const authSecret = process.env.AUTH_SECRET;
@@ -29,13 +30,17 @@ router.post('/sign-up', validateMdw(signUpSchema), async function (req, res) {
 
 router.post('/sign-in', validateMdw(signInSchema), async function (req, res) {
   const user = await userModel.singleByEmail(req.body.email);
-  
-  if (user === null) {
+  if (!user) {
     return res.status(401).json({
       authenticated: false
     });
   }
-  
+  if (user?.lock) {
+    return res.status(401).json({
+      authenticated: false
+    });
+  }
+
   if (!bcrypt.compareSync(req.body.password, user.password)) {
     return res.status(401).json({
       authenticated: false

@@ -22,7 +22,7 @@
                   <div class="flex align-items-center">
                     <img
                       class="rounded-full h-12 w-12 object-cover"
-                      :src="item[field.key]"
+                      :src="item[field.key] || defaultImageSrc"
                       :alt="item[field.key]"
                       @error="$event.target.src = defaultImageSrc"
                     />
@@ -147,10 +147,7 @@ defineProps({
 // computed
 const formatField = (item, field) => {
   const value = item[field.key]
-  console.log('value :>> ', value);
   const type = field.type
-  console.log('value :>> ', value);
-  console.log('type :>> ', type);
   switch (type) {
     case 'boolean':
       if (value)

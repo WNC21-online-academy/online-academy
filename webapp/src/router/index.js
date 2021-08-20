@@ -9,7 +9,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   window.scrollTo(0, 0)
   
-  const { authenticated } = useRefreshToken()
+  const { authenticated } = await useRefreshToken()
 
   if (to.meta.auth === true && !authenticated) {
     return next('/sign-in')

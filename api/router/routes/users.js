@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const validateMdw = require('../../middlewares/validate.mdw');
+const usersSchema = require('../../schema/users/addOrUpdate.json');
+const authMdw = require('../../middlewares/auth.mdw');
 const { uploadImages } = require('../../middlewares/file-upload.mdw')
 const userModel = require('../../models/user.model');
 const roleModel = require('../../models/role.model');
-const authMdw = require('../../middlewares/auth.mdw');
 const pathPrefix = '/assets/images/';
 
-router.get('/students', async function (req, res) {
+router.get('/students', authMdw, async function (req, res) {
   const { keyword, offset, limit } = req.query;
   let orderBy = [{
     column: 'updated_at',
@@ -17,7 +19,7 @@ router.get('/students', async function (req, res) {
   res.status(200).json({ count, list });
 })
 
-router.get('/teachers', async function (req, res) {
+router.get('/teachers', authMdw, async function (req, res) {
   const { keyword, offset, limit } = req.query;
   let orderBy = [{
     column: 'updated_at',
@@ -34,13 +36,12 @@ router.put('/change-pw', authMdw, async function (req, res) {
 
   const user = await userModel.single(userId);
   if (!user || !bcrypt.compareSync(oldPw, user.password)) {
-    return res.status(401).json({
+    return res.status(404).json({
       message: 'Invalid input'
     });
   }
 
   const ret = await userModel.updatePassword(userId, { password: newPw });
-
   return res.status(200).json(ret);
 })
 
@@ -60,7 +61,7 @@ router.put('/profile', authMdw, uploadImages.single('avatar'), async function (r
 })
 
 // Add 
-router.post('/', async function (req, res) {
+router.post('/', validateMdw(usersSchema), async function (req, res) {
   try {
     const user = await userModel.add(req.body);
     if (user) {
@@ -78,7 +79,7 @@ router.post('/', async function (req, res) {
 })
 
 // Update 
-router.put('/:id', async function (req, res) {
+router.put('/:id', authMdw, validateMdw(usersSchema), async function (req, res) {
   try {
     const { id } = req.params;
     const user = await userModel.update(id, req.body);
@@ -97,7 +98,7 @@ router.put('/:id', async function (req, res) {
 })
 
 // Delete 
-router.delete('/:id', async function (req, res) {
+router.delete('/:id', authMdw, async function (req, res) {
   const { id } = req.params;
   try {
     const result = await userModel.delete(id);
@@ -109,7 +110,7 @@ router.delete('/:id', async function (req, res) {
 })
 
 // get one
-router.get('/:id', async function (req, res) {
+router.get('/:id', authMdw, async function (req, res) {
   const { id } = req.params;
   const user = await userModel.viewSingle(id);
   res.status(200).json(user);

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const validateMdw = require('../../middlewares/validate.mdw');
+const ratingSchema = require('../../schema/rating/addOrUpdate.json');
+const authMdw = require('../../middlewares/auth.mdw');
 const ratingModel = require('../../models/rating.model');
-const courseModel = require('../../models/course.model');
-const authMdw = require('../../middlewares/auth.mdw')
 
-router.get('/belong-to/:courseId', authMdw, async function (req, res) {
+router.get('/belong-to/:courseId', async function (req, res) {
   const { courseId } = req.params;
   const { offset, limit } = req.query;
   let orderBy = [{
@@ -16,7 +17,7 @@ router.get('/belong-to/:courseId', authMdw, async function (req, res) {
 })
 
 // Add 
-router.post('/', authMdw, async function (req, res) {
+router.post('/', authMdw, validateMdw(ratingSchema), async function (req, res) {
   try {
     const { userId: id_student } = req.accessTokenPayload;
     const result = await ratingModel.add({ ...req.body, id_student });

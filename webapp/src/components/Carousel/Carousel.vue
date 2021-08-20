@@ -4,7 +4,6 @@
     @swiper="onSwiper"
     @slideChange="onSlideChange"
     :breakpoints="breakpoints"
-    :autoHeight="true"
   >
     <swiper-slide v-for="item in list">
       <Card :item="item" />
@@ -68,6 +67,9 @@ const onSlideChange = _ => {
 </script>
 
 <style scoped>
+.swiper-slide {
+  height: auto;
+}
 .swiper-button-prev,
 .swiper-button-next {
   background-color: rgba(52, 101, 238, 0.7);

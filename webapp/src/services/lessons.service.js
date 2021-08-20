@@ -53,7 +53,7 @@ export const remove = async ({ id }) => {
 export const addOrUpdate = async data => {
   try {
     const { id, title, id_course, sort_order, description, is_draft } = data;
-    const payload = { title, id_course, sort_order, description, is_draft }
+    const payload = { title, id_course, sort_order: +sort_order, description, is_draft }
     let response;
 
     if (id > 0) {

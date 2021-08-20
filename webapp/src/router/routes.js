@@ -44,66 +44,72 @@ export default [
   {
     path: '/search',
     component: CoursesPage,
-    name: 'search',
-    // meta: { auth: true }
+    name: 'search'
   },
   {
     path: '/courses/:id',
     component: CoursePage,
-    name: 'course-detail',
-    // meta: { auth: true }
+    name: 'course-detail'
   },
   {
     path: '/courses/:id/:lessonId',
     component: LessonPage,
     name: 'lesson-detail',
-    // meta: { auth: true }
+    meta: { auth: true }
   },
   {
     path: '/favorite',
     component: FavoriteCoursesPage,
-    name: 'favorite'
+    name: 'favorite',
+    meta: { auth: true }
   },
   {
     path: '/joined',
     component: JoinedCoursesPage,
-    name: 'joined'
+    name: 'joined',
+    meta: { auth: true }
   },
-  // meta: { auth: true, role: 'admin' },
   {
     path: '/admin/categories',
     name: 'manage-categories',
-    component: CategoriesAdminPage
+    component: CategoriesAdminPage,
+    meta: { auth: true }
   },
   {
     path: '/admin/courses',
     name: 'manage-courses',
-    component: CoursesAdminPage
+    component: CoursesAdminPage,
+    meta: { auth: true }
   },
   {
     path: '/admin/teachers',
     name: 'manage-teachers',
-    component: TeachersAdminPage
+    component: TeachersAdminPage,
+    meta: { auth: true }
   },
   {
     path: '/admin/students',
     name: 'manage-students',
-    component: StudentsAdminPage
+    component: StudentsAdminPage,
+    meta: { auth: true }
   },
   {
     path: '/teacher/owncourses',
     name: 'owncourses',
-    component: CoursesTeacherPage
+    component: CoursesTeacherPage,
+    meta: { auth: true }
   },
   {
     path: '/teacher/owncourses/:id',
     name: 'owncourses-detail',
-    component: CoursesTeacherDetailPage
+    component: CoursesTeacherDetailPage,
+    meta: { auth: true }
   },
   {
     path: '/teacher/owncourses/:id/:lessonId',
     name: 'ownlessons-detail',
-    component: LessonsTeacherDetailPage
+    component: LessonsTeacherDetailPage,
+    meta: { auth: true }
   },
   { path: '/:pathMatch(.*)*', component: NotFoundPage },
   { path: '/404', component: NotFoundPage },

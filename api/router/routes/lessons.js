@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const validateMdw = require('../../middlewares/validate.mdw');
+const lessonsSchema = require('../../schema/lessons/addOrUpdate.json');
 const { uploadVideos } = require('../../middlewares/file-upload.mdw')
 const lessonModel = require('../../models/lesson.model');
 const courseModel = require('../../models/course.model');
@@ -24,7 +26,7 @@ router.get('/belong-to/:courseId', authMdw, async function (req, res) {
 })
 
 // Add 
-router.post('/', authMdw, async function (req, res) {
+router.post('/', authMdw, validateMdw(lessonsSchema), async function (req, res) {
   try {
     const result = await lessonModel.add(req.body);
     if (result) {
@@ -59,7 +61,7 @@ router.put('/:id/video', authMdw, uploadVideos.single('video'), async function (
 })
 
 // Update 
-router.put('/:id', authMdw, async function (req, res) {
+router.put('/:id', authMdw, validateMdw(lessonsSchema), async function (req, res) {
   try {
     const { id } = req.params;
     const result = await lessonModel.update(id, req.body);

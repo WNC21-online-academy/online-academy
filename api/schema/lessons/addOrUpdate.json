@@ -1,0 +1,25 @@
+{
+  "required": [
+    "title",
+    "id_course",
+    "sort_order"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "id_course": {
+      "type": "integer"
+    },
+    "sort_order": {
+      "type": "integer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_draft": {
+      "type": "boolean"
+    }
+  }
+}

@@ -46,8 +46,8 @@ export const search = async ({ keyword, categoryId, orderBy, limit, offset }) =>
   return null;
 }
 
-export const fetchById = async ({ id }) => {
-  const response = await axiosInstance.get(`/courses/${+id}`);
+export const fetchById = async ({ id, userId }) => {
+  const response = await axiosInstance.get(`/courses/${+id}`, { params: { userId } });
   if (response.status = 200) {
     const { data } = response;
     return data;
@@ -55,14 +55,14 @@ export const fetchById = async ({ id }) => {
   return null;
 }
 
-export const fetchAll = async ({ keyword, limit, offset }) => {
+export const fetchAll = async ({ is_suspended, keyword, limit, offset }) => {
   const params = {
     keyword,
     // order_by: orderBy,
     limit,
     offset
   }
-  const response = await axiosInstance.get('/courses', { params });
+  const response = await axiosInstance.get(`/courses?is_suspended=${is_suspended}`, { params });
   if (response.status = 200) {
     const { data } = response;
     return data;
@@ -176,6 +176,23 @@ export const addOrUpdate = async data => {
   }
 }
 
+export const suspend = async data => {
+  try {
+    const { id, is_suspended } = data;
+    const payload = { is_suspended }
+    const response = await axiosInstance.put(`/courses/${id}`, payload);
+
+    if (response.status = 200) {
+      const { data } = response;
+      return data;
+    }
+  } catch (error) {
+    return {
+      message: "Lỗi hệ thống"
+    }
+  }
+}
+
 export const remove = async ({ id }) => {
   try {
     const response = await axiosInstance.delete(`/courses/${id}`);
@@ -201,7 +218,7 @@ export const addWatchlist = async data => {
     }
   } catch (error) {
     return {
-      message: "Lỗi hệ thống"
+      message: "Chưa đăng nhập"
     }
   }
 }
@@ -231,7 +248,7 @@ export const joinCourse = async data => {
     }
   } catch (error) {
     return {
-      message: "Lỗi hệ thống"
+      message: "Chưa đăng nhập"
     }
   }
 }

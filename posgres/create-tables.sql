@@ -30,6 +30,7 @@ CREATE TABLE Users (
   email VARCHAR(200) UNIQUE NOT NULL,
   password VARCHAR(500),
   avatar VARCHAR(500),
+  lock BOOLEAN,
   refresh_token VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -62,13 +63,13 @@ CREATE TABLE Courses (
   id_category INT,
   id_created_by INT NOT NULL,
   name VARCHAR(100) NOT NULL,
-  description VARCHAR(200),
-  content VARCHAR(1000),
-  thumbnail VARCHAR(200),
+  description VARCHAR(500),
+  content VARCHAR(5000),
+  thumbnail VARCHAR(500),
   tutition INT,
   is_completed BOOLEAN,
+  is_suspended BOOLEAN,
   view_count INT,
-  -- image_messenger VARCHAR(200),
   url VARCHAR(500),
   is_draft BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -115,14 +116,15 @@ DROP TABLE IF EXISTS Lessons CASCADE;
 CREATE TABLE Lessons (
   id SERIAL PRIMARY KEY,
   id_course INT NOT NULL,
-  sort_order INT UNIQUE NOT NULL,
+  sort_order INT NOT NULL,
   title VARCHAR(100),
   description VARCHAR(500),
   video VARCHAR(500),
   is_draft BOOLEAN,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_lessons_courses FOREIGN KEY (id_course) REFERENCES Courses (id)
+  CONSTRAINT fk_lessons_courses FOREIGN KEY (id_course) REFERENCES Courses (id),
+  UNIQUE (id_course, sort_order)
 );
 CREATE TRIGGER set_updated_at_lessons
 BEFORE INSERT OR UPDATE ON Lessons

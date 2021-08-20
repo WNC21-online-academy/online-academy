@@ -40,7 +40,7 @@ export const add = async data => {
     }
   } catch (error) {
     return {
-      message: "Lỗi hệ thống"
+      message: "Chưa tham gia khóa học"
     }
   }
 }

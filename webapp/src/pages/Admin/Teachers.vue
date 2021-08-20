@@ -19,7 +19,7 @@ const fields = [{
   key: 'avatar',
   title: '',
   type: 'image'
-},{
+}, {
   key: 'fullname',
   title: 'Họ tên'
 }, {
@@ -28,6 +28,12 @@ const fields = [{
 }, {
   key: 'name_role',
   title: 'Vai trò'
+}, {
+  key: 'lock',
+  title: 'Trạng thái',
+  type: 'boolean',
+  trueValue: 'Khóa',
+  falseValue: 'Hoạt động'
 }]
 
 </script>

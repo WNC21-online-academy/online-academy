@@ -16,7 +16,6 @@
           <input
             v-model="state.sort_order"
             type="number"
-            step="1000"
             class="mt-1 focus:rsort_orderng-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
           />
         </div>
@@ -148,7 +147,6 @@
 <script setup>
 import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import WarningIcon from '../Icons/WarningIcon.vue'
 import CheckIcon from '../Icons/CheckIcon.vue'
 import { useUploadFile } from '../../composables/useUploadFile'

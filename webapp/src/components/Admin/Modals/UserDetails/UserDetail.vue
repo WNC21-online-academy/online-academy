@@ -65,6 +65,12 @@
           label
           :disabled="!writable"
         />
+        <label class="font-semibold text-sm text-gray-600 pb-1 block">Khóa tài khoản</label>
+        <input
+          v-model="formData.lock"
+          type="checkbox"
+          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+        />
 
         <template v-for="item in errState">
           <p v-show="item" class="flex font-medium text-sm text-red-700 pb-2">

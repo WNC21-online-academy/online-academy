@@ -1,5 +1,6 @@
 <template>
   <swiper
+    :autoplay="autoplay"
     :slides-per-view="2"
     :space-between="20"
     :navigation="navigation"
@@ -24,14 +25,14 @@
 <script setup>
 import { defineProps, reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import SwiperCore, { Navigation, Pagination, A11y } from 'swiper';
+import SwiperCore, { Navigation, Pagination, A11y, Autoplay } from 'swiper';
 
 import 'swiper/swiper-bundle.min.css';
 import Thumbnail from './Thumbnail.vue'
 import DroprightIcon from '../Icons/DroprightIcon.vue'
 import DropleftIcon from '../Icons/DropleftIcon.vue'
 
-SwiperCore.use([Navigation, Pagination, A11y]);
+SwiperCore.use([Navigation, Pagination, A11y, Autoplay]);
 
 defineProps({
   list: Array
@@ -41,6 +42,11 @@ const navigation = {
   nextEl: '.swiper-button-next',
   prevEl: '.swiper-button-prev',
 }
+
+const autoplay = {
+  delay: 2000
+}
+
 const onSwiper = swiper => {
   // console.log(swiper);
 }

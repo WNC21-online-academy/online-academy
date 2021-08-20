@@ -1,7 +1,7 @@
 <template>
   <!-- Social oauth -->
   <div>
-    <div class="grid grid-cols-3 gap-1">
+    <div class="grid grid-cols-3 gap-1 opacity-30">
       <button
         type="button"
         class="transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal text-center inline-block"

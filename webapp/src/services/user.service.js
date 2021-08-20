@@ -38,8 +38,8 @@ export const fetchById = async ({ id } = {}) => {
 
 export const addOrUpdate = async data => {
   try {
-    const { id, role, fullname, email, password } = data;
-    const payload = { role, fullname, email, password };
+    const { id, role, fullname, email, password, lock } = data;
+    const payload = { role, fullname, email, password, lock };
     let response;
 
     if (id > 0) {
@@ -90,7 +90,7 @@ export const changePassword = async data => {
       return data;
     }
   } catch (error) {
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 404) {
       return {
         message: "Sai mật khẩu"
       }

@@ -19,7 +19,7 @@
         <label
           v-show="formData.id"
           class="font-semibold text-sm text-gray-600 pb-1 block"
-        >Mã khóa học</label>
+        >Mã lĩnh vực</label>
         <input
           v-show="formData.id"
           v-model="formData.id"
@@ -27,7 +27,7 @@
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
           disabled
         />
-        <label class="font-semibold text-sm text-gray-600 pb-1 block">Họ tên</label>
+        <label class="font-semibold text-sm text-gray-600 pb-1 block">Tên</label>
         <input
           v-model="formData.name"
           type="text"

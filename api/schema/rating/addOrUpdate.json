@@ -1,0 +1,19 @@
+{
+  "required": [
+    "id_course",
+    "score",
+    "comment"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id_course": {
+      "type": "integer"
+    },
+    "score": {
+      "type": "integer"
+    },
+    "comment": {
+      "type": "string"
+    }
+  }
+}

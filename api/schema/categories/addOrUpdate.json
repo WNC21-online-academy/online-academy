@@ -1,0 +1,14 @@
+{
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "id_parent": {
+      "type": "integer"
+    }
+  }
+}

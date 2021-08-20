@@ -1,0 +1,25 @@
+{
+  "required": [
+    "fullname",
+    "email"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "role": {
+      "type": "string"
+    },
+    "fullname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "password": {
+      "type": "string"
+    },
+    "lock": {
+      "type": "boolean"
+    }
+  }
+}

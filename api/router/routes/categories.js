@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const categoryModel = require('../../models/category.model');
-const authMdw = require('../../middlewares/auth.mdw')
+const validateMdw = require('../../middlewares/validate.mdw');
+const categoriesSchema = require('../../schema/categories/addOrUpdate.json');
+const authMdw = require('../../middlewares/auth.mdw');
 
 // List all
 router.get('/', async function (req, res) {
@@ -15,7 +17,7 @@ router.get('/', async function (req, res) {
 })
 
 // Add 
-router.post('/', async function (req, res) {
+router.post('/', authMdw, validateMdw(categoriesSchema), async function (req, res) {
   try {
     const category = await categoryModel.add(req.body);
     if (category) {
@@ -33,7 +35,7 @@ router.post('/', async function (req, res) {
 })
 
 // Update 
-router.put('/:id', async function (req, res) {
+router.put('/:id', authMdw, validateMdw(categoriesSchema), async function (req, res) {
   try {
     const { id } = req.params;
     const category = await categoryModel.update(id, req.body);
@@ -52,7 +54,7 @@ router.put('/:id', async function (req, res) {
 })
 
 // Delete 
-router.delete('/:id', async function (req, res) {
+router.delete('/:id', authMdw, async function (req, res) {
   const { id } = req.params;
   try {
     const result = await categoryModel.delete(id);

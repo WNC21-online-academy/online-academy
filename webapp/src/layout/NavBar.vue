@@ -206,18 +206,26 @@
             @click="onToggleProfile(!showProfileDropdown)"
             class="flex flex-row items-center w-full px-2 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-full md:w-auto md:mt-0 md:ml-2 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
           >
-            <span class="w-8 h-8 rounded-full p-1">
-              <Avatar :src="store.state.user?.avatar" />
-            </span>
+            <Avatar :src="store.state.user?.avatar" class="h-8 w-8 rounded-full" />
           </button>
           <div
             v-show="showProfileDropdown"
             class="absolute right-0 w-full mt-5 origin-top-right rounded-md shadow-lg md:w-48 z-10"
           >
             <div class="px-2 py-2 bg-white rounded-md shadow">
+              <p
+                class="block p-2 mt-2 bg-transparent rounded-lg text-sm font-medium md:mt-0 text-gray-500"
+              >
+                <span v-if="store.getters.isAdmin()">Quản trị viên:</span>
+                <span v-if="store.getters.isTeacher()">Giáo viên:</span>
+                <span v-if="store.getters.isStudent()">Học viên:</span>
+              </p>
+              <p
+                class="block pb-2 px-4 mt-2 bg-transparent rounded-lg text-sm font-bold md:mt-0 text-gray-500"
+              >{{ store.state.user?.fullname }}</p>
               <router-link
                 to="/profile"
-                class="block p-2 mt-2 bg-transparent rounded-lg text-sm font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                class="block p-2 mt-2 bg-transparent rounded-lg text-sm font-medium md:mt-0 text-gray-700 hover:text-gray-600 focus:text-gray-600 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
               >Cập nhật thông tin</router-link>
             </div>
           </div>
@@ -240,7 +248,7 @@ import DroprightIcon from '../components/Icons/DroprightIcon.vue'
 import LogoIcon from '../components/Icons/LogoIcon.vue'
 import MenuIcon from '../components/Icons/MenuIcon.vue'
 import Avatar from '../components/Avatar.vue'
-import { BASE_URL } from '../utils/contants';
+import { BASE_URL } from '../utils/contants'
 
 // store
 const store = inject('store')
