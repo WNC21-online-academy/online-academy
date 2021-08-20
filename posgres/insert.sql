@@ -215,7 +215,7 @@ VALUES
   -- Am nhac 99-103
   -- Hoi hoa 104-107 
 ;
-ALTER SEQUENCE courses_id_seq RESTART WITH 26;
+ALTER SEQUENCE courses_id_seq RESTART WITH 27;
 
 
 TRUNCATE Lessons CASCADE;

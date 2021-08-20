@@ -161,12 +161,9 @@ module.exports = {
   },
 
   async update(id, course) {
-    const { id_category } = course
     const result = await db('courses')
-      .where('id', id).update({
-        ...course,
-        id_category: id_category > 0 ? id_category : null
-      })
+      .where('id', id)
+      .update(course)
       .returning('*');
     return result[0];
   },
