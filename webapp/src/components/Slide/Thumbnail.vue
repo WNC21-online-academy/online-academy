@@ -78,7 +78,7 @@ function onClickJoin(id) {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .title-box h1 {
   font-family: "Futura";
 }
